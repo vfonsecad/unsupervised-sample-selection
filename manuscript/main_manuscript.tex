@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = blue,
+            urlcolor  = blue,
+            citecolor = blue,
+            anchorcolor = blue]{hyperref}
+\usepackage[natbibapa]{apacite}
+\usepackage{eso-pic}
+
+\renewenvironment{abstract}
+  {{\bfseries\noindent{\abstractname}\par\nobreak}\footnotesize}
+  {\bigskip}
+
+\titlespacing{\section}{0pt}{*3}{*1}
+\titlespacing{\subsection}{0pt}{*2}{*0.5}
+\titlespacing{\subsubsection}{0pt}{*1.5}{0pt}
+
+\usepackage{authblk}
+
+\usepackage{graphicx}
+\usepackage[space]{grffile}
+\usepackage{latexsym}
+\usepackage{textcomp}
+\usepackage{longtable}
+\usepackage{tabulary}
+\usepackage{booktabs,array,multirow}
+\usepackage{amsfonts,amsmath,amssymb}
+\providecommand\citet{\cite}
+\providecommand\citep{\cite}
+\providecommand\citealt{\cite}
+% You can conditionalize code for latexml or normal latex using this.
+\newif\iflatexml\latexmlfalse
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}%
+
+\AtBeginDocument{\DeclareGraphicsExtensions{.pdf,.PDF,.eps,.EPS,.png,.PNG,.tif,.TIF,.jpg,.JPG,.jpeg,.JPEG}}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+
+
+\begin{document}
+
+\title{Cost-effective model building in multivariate calibration}
+
+
+\author[ ]{Valeria Fonseca Diaz, Bart De Ketelaere, Ben Aernouts, Wouter Saeys}
+
+\affil[ ]{}
+\vspace{-1em}
+
+
+\date{}
+
+\begingroup
+\let\center\flushleft
+\let\endcenter\endflushleft
+\maketitle
+\endgroup
+
+\selectlanguage{english}
+\begin{abstract}
+{
+Multivariate calibration models conceived as virtual sensors that are used to measure chemical compositions in products are built based on spectral data of samples and their corresponding reference chemical values. The cost of these reference analyses is a major of feature of interest to be minimized in industrial applications for the sake of more efficient analytical processes. The present work aims at characterizing the problem of sample selection based on spectral measurements to build calibration models. We mainly focused on evaluating optimal sample sizes, evaluation of different selection methods and we give recommendations on how to assess the suitability of a set of samples to build bilinear calibration models.
+}\\%
+\end{abstract}%
+
+
+
+\section*{Introduction}\label{introduction}
+
+Frameworks \\
+Research questions
+
+\section*{Experimental}\label{experimental}
+
+
+\subsection*{Data}\label{data}
+
+\subsection*{Methodology}\label{methodology}
+
+
+\section*{Results}\label{results}
+\subsection*{General framework}\label{results:genframework}
+\subsection*{Specific framework}\label{results:specframework}
+
+\subsection*{Model performance}\label{results:modperformance}
+
+\section*{Discussion}\label{discussion}
+
+\section*{Conclusions}\label{conclusions}
+
+
+\end{document}
+
