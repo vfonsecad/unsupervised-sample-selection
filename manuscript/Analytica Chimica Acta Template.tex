@@ -1,0 +1,129 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = blue,
+            urlcolor  = blue,
+            citecolor = blue,
+            anchorcolor = blue]{hyperref}
+\usepackage[natbibapa]{apacite}
+\usepackage{eso-pic}
+\AddToShipoutPictureBG{\AtPageLowerLeft{\includegraphics[scale=0.7]{powered-by-Authorea-watermark.png}}}
+
+\renewenvironment{abstract}
+  {{\bfseries\noindent{\abstractname}\par\nobreak}\footnotesize}
+  {\bigskip}
+
+\titlespacing{\section}{0pt}{*3}{*1}
+\titlespacing{\subsection}{0pt}{*2}{*0.5}
+\titlespacing{\subsubsection}{0pt}{*1.5}{0pt}
+
+\usepackage{authblk}
+
+\usepackage{graphicx}
+\usepackage[space]{grffile}
+\usepackage{latexsym}
+\usepackage{textcomp}
+\usepackage{longtable}
+\usepackage{tabulary}
+\usepackage{booktabs,array,multirow}
+\usepackage{amsfonts,amsmath,amssymb}
+\providecommand\citet{\cite}
+\providecommand\citep{\cite}
+\providecommand\citealt{\cite}
+% You can conditionalize code for latexml or normal latex using this.
+\newif\iflatexml\latexmlfalse
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}%
+
+\AtBeginDocument{\DeclareGraphicsExtensions{.pdf,.PDF,.eps,.EPS,.png,.PNG,.tif,.TIF,.jpg,.JPG,.jpeg,.JPEG}}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+
+
+\begin{document}
+
+\title{Analytica Chimica Acta Template}
+
+
+\author[ ]{Maja Budanovic}
+
+\affil[ ]{}
+\vspace{-1em}
+
+
+\date{}
+
+\begingroup
+\let\center\flushleft
+\let\endcenter\endflushleft
+\maketitle
+\endgroup
+
+\selectlanguage{english}
+\begin{abstract}
+{This Authorea document template can be used to prepare documents
+according to a desired citation style and authoring guidelines.
+Abstracts are not always required, but most academic papers have one and
+writers should know how to produce a useful abstract. An abstract should
+be a very short, clear and concise summation of the entire paper. An
+abstract should provide enough of a preview that a typical reader will
+know whether or not they wish to read the paper. It should reveal both
+the purpose and conclusions of the paper.}\\%
+\end{abstract}%
+
+
+
+\section*{Introduction}\label{introduction}
+
+The format of this template follows the typical journal publication
+which includes an \textbf{abstract} for summarizing the article, an
+\textbf{introduction}, \textbf{results} and \textbf{conclusion}.
+Examples of an \textbf{equation}, \textbf{list} and \textbf{citation}
+are also included.~\\
+
+\subsection*{The purpose of the
+introduction}\label{the-purpose-of-the-introduction}
+
+Most academic introductions follow an `inverted pyramid' structure: they
+start broad and narrow down to a specific thesis or research question.
+The introduction should reveal\\
+
+\begin{enumerate}
+\tightlist
+\item
+  some broad knowledge of the overall topic\\
+\item
+  references to related and prior work in the field of investigation\\
+\item
+  succinct overview of the major point of the paper.\\
+\end{enumerate}
+
+\section*{Results}\label{results}
+
+This section is only included in papers that rely on primary research.
+This section catalogues the results of the experiment. The results
+should be presented in a clear and unbiased way. Most results sections
+will contain \href{http://authorea.com}{links}~as well as
+citations~\hyperref[csl:1]{[1]}~and equations such as~\(e^{i\pi}+1=0\)\\
+
+\section*{Conclusion}\label{auto-label-section-853974}
+
+The conclusion should reinforce the major claims or interpretation in a
+way that is not mere summary. The writer should try to indicate the
+significance of the major claim/interpretation beyond the scope of the
+paper but within the parameters of the field. The writer might also
+present complications the study illustrates or suggest further research
+the study indicates is necessary.
+
+\selectlanguage{english}
+\FloatBarrier
+\section*{References}\sloppy
+\phantomsection
+\label{csl:1}[1]A. Einstein, {Näherungsweise Integration der Feldgleichungen der Gravitation}, in: Albert Einstein: Akademie-Vorträge, Wiley-Blackwell, 1916: pp. 99–108. \url{https://doi.org/10.1002/3527608958.ch7.}
+
+\end{document}
+
