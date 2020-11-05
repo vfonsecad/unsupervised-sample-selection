@@ -53,33 +53,18 @@
 %% when authors are associated with multiple institutions.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \author{Valeria Fonseca Diaz}
-\altaffiliation{MeBioS,
-KU Leuven, Kasteelpark
-Arenberg 30, Leuven, 3000, Belgium
-E-mail: valeria.fonsecadiaz@kuleuven.be
-(Valeria Fonseca Diaz)}
-\author{Fred T. Secondauthor}
-\altaffiliation{Current address: Some other place, Othert\"own,
-Germany}
-\author{I. Ken Groupleader}
-\altaffiliation{A shared footnote}
-\email{i.k.groupleader@unknown.uu}
-\phone{+123 (0)123 4445556}
-\fax{+123 (0)123 4445557}
-\affiliation[Unknown University]
-{Department of Chemistry, Unknown University, Unknown Town}
-\alsoaffiliation[Second University]
-{Department of Chemistry, Second University, Nearby Town}
-\author{Susanne K. Laborator}
-\email{s.k.laborator@bigpharma.co}
-\affiliation[BigPharma]
-{Lead Discovery, BigPharma, Big Town, USA}
-\author{Kay T. Finally}
-\affiliation[Unknown University]
-{Department of Chemistry, Unknown University, Unknown Town}
-\alsoaffiliation[Second University]
-{Department of Chemistry, Second University, Nearby Town}
-
+\email{valeria.fonsecadiaz@kuleuven.be}
+\author{Bart De Ketelaere}
+\email{bart.deketelaere@kuleuven.be}
+\author{Ben Aernouts}
+\email{ben.aernouts@gmail.com}
+\altaffiliation{Biosystems TC, KU Leuven,
+Kleinhoefstraat 4, Geel, Belgium}
+\author{Wouter Saeys}
+\email{wouter.saeys@kuleuven.be}
+\affiliation[KU Leuven]
+{KU Leuven, Kasteelpark
+Arenberg 30, Leuven, Belgium}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% The document title should be given as usual. Some journals require
 %% a running title from the author: this should be supplied as an
@@ -121,15 +106,15 @@ Multivariate calibration models conceived as virtual sensors that are used to me
 
 \section*{Introduction}\label{introduction}
 
-Multivariate \cite{Goos2011}calibration models have been the primary analytical tool to indirectly measure the chemical composition of products making processes such as those of quality control more cost-efficient. Many are still the challenges that are present when building and maintaining these models. In the present work, we aim to make an exhaustive evaluation of the problem of unsupervised sample selection to build successful calibration models. 
+Multivariate calibration models have been the primary analytical tool to indirectly measure the chemical composition of products making processes such as those of quality control more cost-efficient. Many are still the challenges that are present when building and maintaining these models. In the present work, we aim to make an exhaustive evaluation of the problem of unsupervised sample selection to build successful calibration models. This is the type of problem that concerns applications where the product of interest is a collected resource, as it is the case in the agrofood industry (AFI) \cite{Au2020,Diaz-Olivares2020, Saeys2005, Bobelyn2010}.  
 
-Among the different applications where multivariate calibration models take place, the sample collection problem van be regarded as one of designing the samples and as another one of collecting the samples. The first one is the type of problem concerning pharmaceutical applications or in general chemical preparations. The second one is the type of problem that takes place in the agrofood industry (AFI) such as fruits quality inspections, determination of harvesting periods, soil quality, among others. 
+The problem of unsupervised sample selection consists in determining what the best methodology or strategy is to select the samples that would be worthy for reference analysis only based on spectral measurements. As it is widely known, spectral measurements are easy and cheap to collect, therefore a vast quantity of units can be submitted to these measurements with low effort. On the contrary, collecting the reference analyses is a task that requires a lot of effort, high costs and possibly high waste. This has been the motivation to pay attention to the optimization of model building costs while gaining model building effectiveness. Historically, the interpretation for this gain has been rephrased as the optimal spread of samples attempting to cover the whole space of variability with a minimum number of samples \cite{Naes1990, Saeys2019,Kennard1969}.
 
-Within the second type of applications, the problem of unsupervised sample selection consists in determining what the best methodology is to select the samples that would be worthy for reference analysis only based on spectral measurements. As it is widely known, spectral measurements are easy and cheap to collect, therefore a vast quantity of units can be submitted to these measurements with low effort. On the contrary, collecting the reference analyses is a task that requires a lot of effort, high costs and possibly high waste. 
+Because of the importance of this problem, up to now there is still research about features such as optimal sample sizes and optimal strategies to select these samples \cite{Au2020, Liu2019}. Through the last decades, many methods have been proposed in light of this problem, some of them becoming widely accepted for their intuitively accurate approach and good performance \cite{Shetty2012a, Nawar2018, He2015}. The two most popular methods in the context of near-infrared (NIR) spectroscopy and multivariate calibration are the Kennard-Stone\cite{Kennard1969} and  Puchwein\cite{Puchwein1988} algorithms. As a strategy, clustering techniques are widely accepted in order to cover the entire variability space\cite{Naes1990}, in particular, when groups of samples exist in batches of collected products\cite{Bobelyn2010}. These popular algorithms have the common feature of relying in distance between the samples. Less popular in NIR applications but highly effective in product design are the optimal design of experiments, which translate the concept of variability from distance between samples to the variance of the coefficients of an assumed model \cite{Goos2011}. Yet, no clear understanding exists about which of all these methods should be used in practice and no exhaustive competition of them has been investigated in NIR applications. The most recent study found attempting to make such a comparison made use of only the two most popular methods mentioned before \cite{Au2020}.
 
-To set the scope of the present analysis, this work is developed under the sphere of bilinear multivariate calibration models for regression, that is, partial least squares regression (PLSR). This means that conclusions on the optimality of a set of samples to build a model are drawn in light of the particular model type and architecture. Although results are not presented here for non-linear models in regression or even for the problem of classification, the same ideas that will be presented can be analysed in those particular cases. 
+Multivariate calibration is a concept that in principle can involve any type of statistical model. However, as of now, there is little doubt on the effectiveness of the type of bilinear models that are widely used for NIR applications. Unless the spectral values are strongly nonlinearly related to chemical reference values, bilinear models such as partial least squares (PLS) or principal component analysis (PCA) for regression or classification remain the basic model architectures. Most of the work that can be found addressing the current problem of interest have attempted to answer mainly the question on the minimum required sample size using PLSR models \cite{Naes1990, Au2020, Shetty2012a, Rodionova2008}. The answers that can be found mainly rely on unique types of applications which leaves a general answer out of the scope. 
 
-PLSR is the most common method or algorithm used to build a bilinear regression model for high-dimensional spectral matrices to be connected to reference analyses. Although other algorithms for the linear model can be used or even consider the problem of a non-linear model, the linear relationship solved by PLSR has proven to be optimal throughout the last decades in modeling the required relationship. 
+In order to have a general answer on the optimal approach to select a calibration set of samples, it is necessary to think of the application at hand in terms of the statistical models. The general framework of statistical learning theory by Vapnik \cite{Vapnik2019, Vapnik2000} provides specific answers on the sample size needed in light of the model to be used. To deepen into this question for NIR applications, it is necessary to understand PLSR within the framework explained by Vapnik. In a similar way, to understand the required features to take into account for a successful PLSR model, it is necessary to understand which elements of the PLSR architecture can be controlled with unsupervised measurements. These ideas need to be clarified in light of the state-of-the-art strategies for sample selection.
 
 We present here a general and a specific framework of PLSR in order to set a context of analysis to solve the problem of the best strategy for unsupervised sample selection. In the coming sections, we present the frameworks involved together with the research questions that they bring. Afterwards, the experimental work and results are presented along with the discussion and analysis on the aspects that lead to a more successful set of samples to build calibration models.
 
