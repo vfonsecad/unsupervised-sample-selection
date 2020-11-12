@@ -151,7 +151,8 @@ In the jargon of multivariate calibration, the basis of $L_2$ is what is known a
 
 For a given value of $d$, the set of resulting latent variables constitute a set of orthonormal variables $\{\phi_{k}(\mathbf{x})\}_{i=1}^d$. However, the set of loading vectors $\{\mathbf{v}_k\}$ is regarded as $\mathbf{S}$-orthogonal, i.e. $\mathbf{v}_k'\mathbf{S}\mathbf{v}_j = 0 \quad (j<k)$, where $\mathbf{S}$ is the covariance matrix of $\mathbf{X}$. The current depiction of the PLSR algorithm clarifies that the estimation of the regression model depends highly on the covariance matrix $\mathbf{S}$ and therefore, when there is availability of a number of spectral measurements $N$, it suggests that it may be possible to select a smaller number of samples $n<N$ for reference analysis such that similar performance is obtained as long as there is equivalence of the matrices $\mathbf{S}$ from the larger sample to the smaller sample, provided that the linear relationship holds true. 
 
-There are several methods and indexes to study the equivalence between two matrices \cite{Tomic2013}. For the sake of bilinear regression models, it becomes manifest to evaluate this equivalence via the spectral value decomposition (SVD) of the matrices. The reason is two-fold. On the one hand, from matrix algebra theory, two matrices are congruent if they have the same eigenvectors \cite{Horn1985}. On the other hand, the eigenvalues of $\mathbf{S}$ serve as the base to calculate the relative predictive power of the SVD directions (i.e. the PC dimensions) for a regression model \cite{Artemiou2013}. The latter reference is actually referring directly to PCR models, but the present work aims to study the matrix $\mathbf{S}$ for the sake of PLSR models.
+There are several methods and indexes to study the equivalence between two matrices \cite{Tomic2013}. For the sake of bilinear regression models, it becomes manifest to evaluate this equivalence via the spectral value decomposition (SVD) of the matrices. The reason is two-fold. On the one hand, from matrix algebra theory, two matrices are congruent if they have the same eigenvectors
+\cite{Horn1985}. On the other hand, the eigenvalues of $\mathbf{S}$ account for the variability that the different dimensions contain and serve as the base to calculate the relative predictive power of the SVD directions (i.e. the PC dimensions) for a regression model \cite{Artemiou2013}. The latter reference is actually referring directly to PCR models, but the present work aims to study the matrix $\mathbf{S}$ for the sake of PLSR models.
 
 % -----------------------------------------------------
 % ------------------- research questions  ------------
@@ -247,7 +248,7 @@ RS & $p$ & $N$\\
 
 \subsubsection*{Analysis of covariance matrix $\mathbf{S}$}
 
-We evaluated the equivalence or congruence between the covariance matrix based on the full available sample of size $N$ ($\mathbf{S}_N$) and a covariance matrix based on a subset of size $n$ ($\mathbf{S}_n$) through the correspondence of their eigenvectors and the eigenvalues. The spectral value decomposition of $\mathbf{S}_N = \mathbf{V_N \Delta_N V'_N}$ and $\mathbf{S}_n = \mathbf{V_n \Delta_n V'_n}$ was calculated. The eigenvalues were compared by calculating the ratio  $\Delta_n/\Delta_N$ and the eigenvectors were compared by computing the absolute value of the determinant for the matrix $V'_nV_N$ setting a value for the rank.
+We evaluated the equivalence or congruence between the covariance matrix based on the full available sample of size $N$ ($\mathbf{S}_N$) and a covariance matrix based on a subset of size $n$ ($\mathbf{S}_n$) through the correspondence of their eigenvectors and the eigenvalues. The spectral value decomposition of $\mathbf{S}_N = \mathbf{V_N \Delta_N V'_N}$ and $\mathbf{S}_n = \mathbf{V_n \Delta_n V'_n}$ was calculated. The eigenvalues were compared by calculating the ratio  $\Delta_n/\Delta_N$ and the eigenvectors were compared by computing the absolute value of the determinant for the matrix $V'_nV_N$ setting a value for the rank. As the set of eigenvectors constitutes also an orthonormal basis, this determinant takes an absolute value between 0 and 1. In addition, Pearson correlations between $y$ and the SVD dimensions (i.e. PC scores) were calculated to show the impact of dimensions of small variability.
 
 \subsubsection*{Multivariate calibration models}
 
@@ -288,17 +289,20 @@ Figures \ref{fig_d01_milk_general_framework}(b) and \ref{fig_d02_manure_general_
 
 \subsection*{Specific framework}\label{results:specframework}
 
-\emph{Is there any relationship between eigenvectors and eigenvalues of $\mathbf{S}_N$ and $\mathbf{S}_n$ as a function of the sample size}
+\emph{Is there any relationship between eigenvectors and eigenvalues of $\mathbf{S}_N$ and $\mathbf{S}_n$ as a function of the sample size?}
 
-As stated in the introduction for the specific framework, the mathematical element that can be controlled to calibrate PLSR models is $\mathbf{S}$, the covariance matrix of $\mathbf{X}$. The analysis of equivalence or congruence between $\mathbf{S}_N$ and $\mathbf{S}_n$ was done by comparing the eigenvectors and eigenvalues of the matrices. Figure \ref{fig_specific_framework_detereigevect} shows the comparison of the eigenvectors of $\mathbf{S}_N$ and $\mathbf{S}_n$ for both of the case studies when the sample selection was made with $a=15,20,\text{and} 25$. These values of $a$ corresponded to rank values going beyond the number of dimensions that accumulate more than 99.99\% of variance in both case studies.
+As stated in the introduction for the specific framework, the mathematical element that can be controlled to calibrate PLSR models is $\mathbf{S}$, the covariance matrix of $\mathbf{X}$. The analysis of equivalence or congruence between $\mathbf{S}_N$ and $\mathbf{S}_n$ was done by comparing the eigenvectors and eigenvalues of the matrices. Figure \ref{fig_specific_framework_detereigevect} shows the comparison of the eigenvectors of $\mathbf{S}_N$ and $\mathbf{S}_n$ for both of the case studies when the sample selection was made with $a=15,20,\text{and} 25$with each method. These values of $a$ corresponded to rank values going beyond the number of dimensions that accumulate more than 99.99\% of variance in both case studies.
 
-Similar insights could be obtained from both case studies. The comparison of the eigenvectors had a clear difference depending on the input dimensionality $a$. When selecting the samples with 15 and 20 components, a high equivalence of eigenvectors could be obtained with less than 100 samples in both cases. When the 
+Across the different methods, the determinant to be evaluated was higher than 0.8 for sample sizes less than 100 in both case studies when setting the rank $a=15 \text{and} 20$. Likewise, across the methods, there was an evident difference in the behavior of the determinant for $a=25$. In both case studies, CL and D-OPT selection showed a jump in the determinant around the same sample sizes. This was not the same behavior for the other selection methods. As expected, due to the nature of selection with DUP, the determinant presents a declination after crossing 50\% of the samples for selection. However, this decline was obtained for $a=20, 25$ and not for $a=15$ making evident the effect of the input dimensionality.   
 
-The second part that needs to be studied for the equivalence of the covariance matrices is the resulting eigenvalues. The eigenvalues account for the variability that the different dimensions contain. It was confirmed that, for unsupervised selection it is or primary importance to take into account exactly the expansion of such a variability. Figure \ref{fig_d01_milk_specific_framework_eigenvalsratio} shows the comparison of the eigenvalues for the Milk case for the different selection methods fixing $a=25$. The curves are colored by the sample size. In this comparison, the same effect of the Duplex algorithm is clearly shown as the ratio of the eigenvalues goes under 1 which is an underestimation of the variability based on total sample.  The selection under KS or Puchwein show that in general there is no underestimation of variability as the eigenvalues ratio stays above 1. However, for small sample sizes it is detected that there is no uniform spanning of the variability as some eigenvalues are twice as large as others. Most interestingly, this discrepancy happens at specific directions of the SVD. The disadvantage of this behaviour is that those directions that have a smaller spanning compared to other ones may harm the real covariability with the $y$ variables which is the risk that we aim to low when selecting samples in an unsupervised setting. 
+The second part in analyzing the equivalence of covariance matrices corresponded to the comparison of the eigenvalues. Figure \ref{fig_d01_milk_specific_framework_eigenvalsratio} shows the comparison of the eigenvalues at each dimension for the Milk case across selection methods and selecting with $a=25$. The curves are colored by the sample size. In this comparison, the same effect of the Duplex algorithm is detected as the ratio of the several eigenvalues goes under 1 which translates into an underestimation of the variability at that particular direction compared to the variability based on total sample.  The selection under KS, D-OPT and PUCH show that in general there is no underestimation of variability as the eigenvalues ratio stays above 1 except one dimension with the smallest sample size. For all the methods except RS, the selection with small sample sizes clearly shows that there is no uniform spanning of the variability as some dimensions result in eigenvalues ratios are twice as large as others. Most interestingly, this discrepancy happens at the same specific directions of the SVD across the selection methods.
 
-As clustering is a more robust method compared to the other methods in terms of control over the possible outliers, the eigenvalues ratio is overall more stable and closer to 1 in comparison with the other methods. In fact, for some directions when keeping a small sample size, the ratio went quite under 1. D-OPT showed more linearity for the ratio as a function of the sample size compared to the other methods and being generally also the highest ratio values. This result is expected as the nature of selection by D-OPT is exactly the expansion of variability of the SVD directions.  Finally, the random selection proved to be in no real relation with the sample size, presenting highly oscillating results for small sample sizes and getting stable around 1 as the sample size is close to the total sample. 
+As CL is a more robust method compared to the other methods in terms of control over possible outliers, the eigenvalues ratio is overall more stable and closer to 1 in comparison with the other methods. In fact, for some directions when keeping a small sample size, the ratio went quite under 1. D-OPT showed more linearity for the ratio as a function of the sample size compared to the other methods and being generally also the highest ratio values. This result is expected as the nature of selection by D-OPT is exactly the expansion of variability of the SVD directions.  
 
-The behaviour of the different methods described for the Milk case were observed also in the analysis of the Manure case as shown in Figure \ref{fig_d02_manure_specific_framework_eigenvalsratio}. It was seen that indeed D-OPT managed to keep the ratio linearly higher as a function of the sample size than the other methods did. This result was particularly clear for the later SVD directions.The expansion of variability for those late directions was kept lower with CL selection.  
+The behavior of the different methods described for the Milk case were observed also in the analysis of the Manure case as shown in Figure \ref{fig_d02_manure_specific_framework_eigenvalsratio}. It was seen that indeed D-OPT managed to keep the ratio linearly higher as a function of the sample size than the other methods did. This result was particularly clear for the later SVD dimensions. The expansion of variability for those late directions was kept lower with CL selection than with other methods except RS.  
+
+To complement this analysis, Pearson correlations were calculated between the SVD dimensions and the $y$ variables in both case studies. Table \ref{tab_correlations} shows the correlations for different dimensions. In the case of Milk, PC's 18 and 21 showed higher correlations with lactose than even PC's 1 and 2. In the case of Manure, DM had a higher correlation with PC 5 than PC 1. For applications such as the Milk case study it was observed that there is a high correlation with late PC's which are mostly underestimated compared to first PC's, based on the resulting eigenvalues ratio results for the different methods. Finally, the random selection proved to be in no real relation with the sample size, presenting highly oscillating results for small sample sizes and getting stable around 1 as the sample size is close to the total sample. 
+
 
 \begin{table*}[t]
 \centering
@@ -330,30 +334,30 @@ pc	& correlation	&  pc & correlation	\\
     \centering
     \subfigure[Milk]{\includegraphics[width=0.6\textwidth]{manuscript/figures/d01_milk_specific_framework_detereigevect.png}} 
     \subfigure[Manure]{\includegraphics[width=0.6\textwidth]{manuscript/figures/d02_manure_specific_framework_detereigevect.png}}
-    \caption{}
+    \caption{Comparison of eigenvectors when selecting samples with every method and input dimensionality $a=15,20,25$.}
     \label{fig_specific_framework_detereigevect}
 \end{figure*}
 
 \begin{figure}[b]
 \includegraphics[width=0.8\textwidth]{manuscript/figures/d01_milk_specific_framework_eigenvalsratio.png}
 \centering
-\caption{}
+\caption{Comparison of eigenvalues for Milk when selecting samples with every method and input dimensionality $a=25$.}
 \label{fig_d01_milk_specific_framework_eigenvalsratio}
 \end{figure}
 
 \begin{figure}[b]
 \includegraphics[width=0.8\textwidth]{manuscript/figures/d02_manure_specific_framework_eigenvalsratio.png}
 \centering
-\caption{}
+\caption{Comparison of eigenvalues for Manure when selecting samples with every method and input dimensionality $a=25$.}
 \label{fig_d02_manure_specific_framework_eigenvalsratio}
 \end{figure}
 
 \subsection*{Model performance}\label{results:modperformance}
 
 
-\emph{What are the most suitable selection methods in the state of the art for the sake of satisfactory PLSR models?}
+\emph{What are the most suitable sample selection conditions in light of satisfactory PLSR models?}
 
-At the aim of connecting the results of the general and the specific framework with the performance of the PLSR calibration models, the RMSEP curves are analyzed in light of the three factors taken into account: Sample size, selection method and input dimensionality. The motivation to analyze the RMSEP curves is to establish conditions for which the performance of the model stays as close as possible to the result that would be achieved if the PLSR model was built with the complete set of samples. 
+At the aim of connecting the results of the general and the specific framework with the performance of the PLSR calibration models, the RMSEP curves are analyzed in terms of the three factors taken into account: Selection method, input dimensionality and sample size. The motivation to analyze the RMSEP curves is to establish conditions for which the performance of the model stays as close as possible to the result that would be achieved if the PLSR model was built with the complete set of samples. 
 
 The grid in Figures \ref{fig_d01_milk_model_performance} and \ref{fig_d02_manure_model_performance} shows the PLSR model performance for the three factors. The selection methods are accommodated row-wise, punctual sample sizes are positioned column-wise and the color of the curves stands for the input dimensionality as shown in the colorbar. The main insight when comparing both case studies in terms of the impact of the sample selection factors is that the stabilization or convergence occurs differently depending on the number of latent variables. 
 
@@ -361,7 +365,7 @@ The grid in Figures \ref{fig_d01_milk_model_performance} and \ref{fig_d02_manure
 \begin{figure}[b]
 \includegraphics[width=0.8\textwidth]{manuscript/figures/d01_milk_model_performance.png}
 \centering
-\caption{}
+\caption{Model performance to predict lactose according to selection method, input dimensionality and sample size. The red line represents input dimensionality $a=p$.}
 \label{fig_d01_milk_model_performance}
 \end{figure}
 
@@ -375,7 +379,7 @@ The model performance results shown for the Manure case were suggested similar c
 \begin{figure}[b]
 \includegraphics[width=0.8\textwidth]{manuscript/figures/d02_manure_model_performance.png}
 \centering
-\caption{}
+\caption{Model performance to predict DM according to selection method, input dimensionality and sample size. The red line represents input dimensionality $a=p$.}
 \label{fig_d02_manure_model_performance}
 \end{figure}
 
