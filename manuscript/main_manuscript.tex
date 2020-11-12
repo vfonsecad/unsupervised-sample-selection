@@ -112,9 +112,9 @@ The problem of unsupervised sample selection consists in determining what the be
 
 Because of the importance of this problem, up to now there is still research about features such as optimal sample sizes and optimal strategies to select these samples \cite{Au2020, Liu2019}. Through the last decades, many methods have been proposed in light of this problem, some of them becoming widely accepted for their intuitively accurate approach and good performance \cite{Shetty2012a, Nawar2018, He2015}. The two most popular methods in the context of near-infrared (NIR) spectroscopy and multivariate calibration are the Kennard-Stone\cite{Kennard1969} and  Puchwein\cite{Puchwein1988} algorithms. As a strategy, clustering techniques are widely accepted in order to cover the entire variability space\cite{Naes1990}, in particular, when groups of samples exist in batches of collected products\cite{Bobelyn2010}. These popular algorithms have the common feature of relying in distance between the samples. Less popular in NIR applications but highly effective in product design are the optimal design of experiments, which translate the concept of variability from distance between samples to the variance of the coefficients of an assumed model \cite{Goos2011}. Yet, no clear understanding exists about which of all these methods should be used in practice and no exhaustive competition of them has been investigated in NIR applications. The most recent study found attempting to make such a comparison made use of only the two most popular methods mentioned before \cite{Au2020}.
 
-Multivariate calibration is a concept that in principle can involve any type of statistical model. However, as of now, there is little doubt on the effectiveness of the type of bilinear models that are widely used for NIR applications. Unless the spectral values are strongly nonlinearly related to chemical reference values, bilinear models such as partial least squares (PLS) or principal component analysis (PCA) for regression or classification remain the basic model architectures. Most of the work that can be found addressing the current problem of interest have attempted to answer mainly the question on the minimum required sample size using PLSR models \cite{Naes1990, Au2020, Shetty2012a, Rodionova2008}. The answers that can be found mainly rely on unique types of applications which leaves a general answer out of the scope. 
+Multivariate calibration is a concept that in principle can involve any type of statistical model. Moreover, both classification and regression models are used in these applications. While the present work focuses on the regression task, the scheme here presented can serve as guidance for classification tasks. Regarding the model architecture, as of now, there is little doubt on the effectiveness of the type of bilinear models that are widely used for NIR applications. Unless the spectral values have a strong nonlinear relationship with chemical reference values, bilinear models such as partial least squares regression (PLSR) or principal component regression (PCR) remain the basic model architectures. Most of the work that can be found addressing the current problem of interest have attempted to answer mainly the question on the minimum required sample size using PLSR models \cite{Naes1990, Au2020, Shetty2012a, Rodionova2008}. The answers that can be found are based on individual applications which leaves a general answer out of the scope. 
 
-In order to have a general answer on the optimal approach to select a calibration set of samples, it is necessary to think of the application at hand in terms of the statistical models. The general framework of statistical learning theory by Vapnik \cite{Vapnik2019, Vapnik2000} provides specific answers on the sample size needed in light of the model to be used. To deepen into this question for NIR applications, it is necessary to understand PLSR within the framework explained by Vapnik. In a similar way, to understand the required features to take into account for a successful PLSR model, it is necessary to understand which elements of the PLSR architecture can be controlled with unsupervised measurements. These ideas need to be clarified in light of the state-of-the-art strategies for sample selection.
+In order to have a more general answer on the optimal approach to select a calibration set of samples, it is necessary to think of the application at hand in terms of the statistical models. The general framework of statistical learning theory by Vapnik \cite{Vapnik2019, Vapnik2000} provides specific answers on the sample size needed in light of the model to be used. To deepen into this question for NIR applications, it is necessary to understand PLSR within the framework explained by Vapnik. In a similar way, to understand the required features to take into account for a successful PLSR model, it is necessary to understand which elements of the PLSR architecture can be controlled with unsupervised measurements. These ideas need to be clarified in light of the state-of-the-art strategies for sample selection.
 
 We present here a general and a specific framework of PLSR in order to set a context of analysis to solve the problem of the best strategy for unsupervised sample selection. In the coming sections, we present the frameworks involved together with the research questions that they bring. Afterwards, the experimental work and results are presented along with the discussion and analysis on the aspects that lead to a more successful set of samples to build calibration models.
 
@@ -126,31 +126,32 @@ We present here a general and a specific framework of PLSR in order to set a con
 
 \subsection*{The general framework}
 
-We aim to put PLSR in the general framework of statistical learning theory. As such, we assume that the response variable is a function consisting in a linear combination and an error variable. With that model architecture, the aim is to minimize a square error. More concretely, let $y \in \mathbb{R}$ be the random variable representing the reference chemical variable of interest and   $\mathbf{x} \in \mathbb{R}^{p}$ the predictor vector of spectral measurements. We assume the relationship $ y = f(\mathbf{x}, \boldsymbol{\beta}) + \epsilon$.  The general regression problem with square error can be established as:
+We aim to put PLSR in the general framework of statistical learning theory. As such, we assume that the response variable is a function consisting in a linear combination and an error variable. With that model architecture, the aim is to minimize a square error \cite{Vapnik2019}. More concretely, let $y \in \mathbb{R}$ be the random variable representing the reference chemical variable of interest and   $\mathbf{x} \in \mathbb{R}^{p}$ the predictor vector of spectral measurements. We assume the relationship $ y = f(\mathbf{x}, \boldsymbol{\beta}) + \epsilon$.  The general regression problem with square error can be established as \cite{Vapnik2000}:
 
 \begin{equation}
     \min E \left[ (y-f(\mathbf{x}, \boldsymbol{\beta}))^2\right]; \quad f(\mathbf{x}, \boldsymbol{\beta}) = \sum_{k=1}^{\infty} \beta_k \phi_{k}(\mathbf{x})
     \label{eq_general_regression_problem}
 \end{equation}
 
-where $\{\phi_{i}(\mathbf{x})\}$ constitute a basis of $L_2$ which can be ordered by some criterion. In terms of the statistical learning theory by Vapnik, $E \left[ (y-f(\mathbf{x}, \boldsymbol{\beta}))^2\right]$ is called the \emph{expected risk} which is in practice replaced by the so-called \emph{empirical risk} in the presence of a set of $n$ observations to estimate function $f$. In this case, the empirical risk is what has been known for centuries as the sum of square errors. Now, to ensure a small \emph{expected risk}, the \emph{empirical risk} can be minimized only over a limited number of basis functions $\{\phi_{k}(\mathbf{x})\}_{k=1}^d$. Therefore, we are left with a regression problem of the form:
+where $\{\phi_{i}(\mathbf{x})\}$ constitutes a basis of $L_2$ which can be ordered by some criterion. In terms of the statistical learning theory by Vapnik, $E \left[ (y-f(\mathbf{x}, \boldsymbol{\beta}))^2\right]$ is called the \emph{expected risk} which is in practice replaced by the so-called \emph{empirical risk} in the presence of a set of $n$ observations to estimate function $f$ \cite{Vapnik2000}. In this case, the empirical risk is what has been known for centuries as the sum of square errors. Now, to ensure a small \emph{expected risk}, the \emph{empirical risk} can be minimized only over a limited number of basis functions $\{\phi_{k}(\mathbf{x})\}_{k=1}^d$. Therefore, we are left with a regression problem of the form:
 
 \begin{equation}
     \min \frac{1}{n} \sum_{i=1}^n (y_i-f_d(\mathbf{x}_i, \boldsymbol{\beta}))^2; \quad f_d(\mathbf{x}, \boldsymbol{\beta}) = \sum_{k=1}^{d} \beta_k \phi_{k}(\mathbf{x})
     \label{eq_square_loss_empirical_regression_problem}
 \end{equation}
 
-It is therefore in this regard, that the problem as stated in eq. (\ref{eq_square_loss_empirical_regression_problem}) corresponds to the problem that is solved with the PLSR algorithm, where the basis $\{\phi_{k}(\mathbf{x})\}$ is constructed based on finding the eigenvectors of the covariance between $y$ and $\mathbf{x}$ and are ordered by the amount of covariance. The key element in this framework is the fact that the number of chosen basis functions $d$ represents what Vapnik's theory calls the $VC$ dimension, which is a value that measures the capacity control of a learning machine. The importance of a capacity control value as $d$ for PLSR comes as the reference for determining a suitable sample size when aiming to build a regression machine or as known in the context of chemometrics, a multivariate calibration model. 
+It is therefore in this regard, that the problem as stated in eq. (\ref{eq_square_loss_empirical_regression_problem}) corresponds to the problem that is solved under the PLSR model architecture \cite{Stone1990}, where the basis $\{\phi_{k}(\mathbf{x})\}$ is constructed based on finding the eigenvectors of the covariance between $y$ and $\mathbf{x}$ and are ordered by the amount of covariance. The key element in this framework is the fact that the number of chosen basis functions $d$ represents what Vapnik's theory calls the $VC$ dimension, which is a value that measures the capacity control of a learning machine \cite{Vapnik2019}. The importance of a capacity control value as $d$ for PLSR comes as the reference for determining a suitable sample size when aiming to build a regression machine or as known in the context of chemometrics, a multivariate calibration model. 
 
-In Vapnik's work, it has been stated that we can talk about small sample size or a large sample size depending on the ratio between the sample size and the $VC$ dimension. Although there is no absolute threshold, it is stated that a large sample size starts when the ratio $n/d>20$.
+In Vapnik's work, it has been stated that we can talk about \emph{small} sample size or a \emph{large} sample size depending on the ratio between the sample size and the $VC$ dimension. Although there is no absolute threshold, it is stated that the sample size is \emph{large} when  $n/d>20$ \cite{Vapnik2000}.
 
-% mention here the work found in the group of Tom Fearn, australia
 
 \subsection*{The specific framework}
 
 In the jargon of multivariate calibration, the basis of $L_2$ is what is known as the set of latent variables. Based on a set of $n$ observations stored in the matrices $\mathbf{X}_{n\times p}$ and $Y_{n\times 1}$, the underlying idea of the PLS algorithm is to build latent variables $\{\phi_{k}(\mathbf{x})\}$ such that $\phi_k(\mathbf{x}) = \mathbf{Xv}_{k}$, where $\mathbf{v}_k$ results from maximizing the covariance between $X$ and $Y$ at the $k$-th deflation step. 
 
-For a given value of $d$, the set of resulting latent variables constitute a set of orthonormal variables $\{\phi_{k}(\mathbf{x})\}_{i=1}^d$. However, the set of loading vectors $\{\mathbf{v}_k\}$ is regarded as $\mathbf{S}$-orthogonal, i.e. $\mathbf{v}_k'\mathbf{S}\mathbf{v}_j = 0 \quad (j<k)$, where $\mathbf{S}$ is the covariance matrix of $\mathbf{X}$. The current depiction of the PLS algorithm clarifies that the estimation of the regression model depends highly on the covariance matrix $\mathbf{S}$ and therefore, when there is availability of a number of spectral measurements $N$, we can think of selecting a smaller amount of samples $n$ for reference analysis and expect to have a similar performance as long as there is equivalence of the matrices $\mathbf{S}$ from the larger sample to the smaller sample. 
+For a given value of $d$, the set of resulting latent variables constitute a set of orthonormal variables $\{\phi_{k}(\mathbf{x})\}_{i=1}^d$. However, the set of loading vectors $\{\mathbf{v}_k\}$ is regarded as $\mathbf{S}$-orthogonal, i.e. $\mathbf{v}_k'\mathbf{S}\mathbf{v}_j = 0 \quad (j<k)$, where $\mathbf{S}$ is the covariance matrix of $\mathbf{X}$. The current depiction of the PLSR algorithm clarifies that the estimation of the regression model depends highly on the covariance matrix $\mathbf{S}$ and therefore, when there is availability of a number of spectral measurements $N$, it suggests that it may be possible to select a smaller number of samples $n<N$ for reference analysis such that similar performance is obtained as long as there is equivalence of the matrices $\mathbf{S}$ from the larger sample to the smaller sample, provided that the linear relationship holds true. 
+
+There are several methods and indexes to study the equivalence between two matrices \cite{Tomic2013}. For the sake of bilinear regression models, it becomes manifest to evaluate this equivalence via the spectral value decomposition (SVD) of the matrices. The reason is two-fold. On the one hand, from matrix algebra theory, two matrices are congruent if they have the same eigenvectors \cite{Horn1985}. On the other hand, the eigenvalues of $\mathbf{S}$ serve as the base to calculate the relative predictive power of the SVD directions (i.e. the PC dimensions) for a regression model \cite{Artemiou2013}. The latter reference is actually referring directly to PCR models, but the present work aims to study the matrix $\mathbf{S}$ for the sake of PLSR models.
 
 % -----------------------------------------------------
 % ------------------- research questions  ------------
@@ -158,12 +159,14 @@ For a given value of $d$, the set of resulting latent variables constitute a set
 
 \section*{Research questions}
 
-When depicting the understanding of PLSR models from a general framework and a specific framework, we see that there are clear elements to take into account at the moment of selecting samples from a large set of available spectral measurements to build calibration models. On the one hand, the $VC$ dimension comes as a reference value for the sample size. On the other hand, if $N$ spectral measurements are available, we may be able to determine the quality of a set a subset of these samples of size $n<N$ based on the equivalence of the covariance matrices $\mathbf{S}$ for $N$ and $n$ samples concluding that the resulting PLSR model in the presence of $N$ analysis is not importantly different from the resulting model based on selected $n$ samples. With this in mind, our research questions are:
+When depicting the understanding of PLSR models from a general framework and a specific framework, we see that there are clear elements to take into account at the moment of selecting samples from a large set of available spectral measurements to build calibration models. On the one hand, the $VC$ dimension comes as a reference value for the sample size. On the other hand, if $N$ spectral measurements are available, we may be able to determine the quality of a set a subset of these samples of size $n<N$ based on the equivalence of the covariance matrices $\mathbf{S}$ for $N$ and $n$ samples. With this in mind, we aim to study the following aspects:
 
 \begin{itemize}
-    \item Can we find specific thresholds for the optimal sample size in particular for calibration models in chemometrics based on the ratio $n/d$?
-    \item What are the most suitable selection methods in the state of the art for the sake of satisfactory PLSR models?
-    \item How can we evaluate the equivalence between the matrices $\mathbf{S}$ of different sample sizes when using the sota methods for selection?
+    \item Can we find particular thresholds regarding the optimal sample size for satisfactory PLSR models in chemometrics based on the ratio $n/d$?
+
+    \item Is there any relationship between eigenvectors and eigenvalues of $\mathbf{S}_N$ and $\mathbf{S}_n$ as a function of the sample size?
+    
+    \item What are the most suitable sample selection conditions in light of satisfactory PLSR models?
 \end{itemize}
 
 % -----------------------------------------------------
@@ -174,11 +177,11 @@ When depicting the understanding of PLSR models from a general framework and a s
 
 \subsection*{Case studies}\label{data}
 
-We selected two AFI real case studies to demonstrate the aspects previously discussed about unsupervised sample selection. The first one corresponds to the inspection of milk composition where data of 2 periods of time was available both for spectral signals and reference analysis. During the first period 316 samples were collected followed by 79 new samples collected in the second period. The time frame between the periods was one week. The spectral measurements correspond to transmittance mode gathered in the range 900 nm - 1700 nm with a resolution of 3 nm. In this case the chemical variable of interest was lactose. 
-The second case corresponds to pig manure samples were 2 sets were available for the inspection of the manure composition. One set of 420 samples was measured under the same conditions for calibration and another set of 164 samples was measured for validation. The chemical constituent chosen for inspection through calibration was Dry Matter. The spectral measurements correspond to reflectance model in the range 426 nm - 1686 nm with a resolution of 9 nm.
-For the purpose of analyzing the sample selection problem, we refer to the first sets in both cases as selection set, the samples chosen by the different methods constitute the calibration set and the samples on the second sets represent the test set. 
+We selected two AFI real case studies to demonstrate the aspects previously discussed about unsupervised sample selection. The first one corresponds to the inspection of milk composition where data of 2 periods of time were available both for spectral signals and reference analysis \cite{Diaz-Olivares2020}. During the first period 316 samples were collected followed by 79 new samples collected in the second period. The time frame between the periods was two weeks. The spectral measurements correspond to transmittance mode gathered in the range 900 nm - 1700 nm with a resolution of 3 nm. In this case the chemical variable of interest was lactose. 
+The second case corresponds to pig manure samples collected in 2015 where 2 sets were available for the inspection of the manure composition \cite{Saeys2005}. One set of 420 samples was measured under the same conditions for calibration and a separate set of 164 samples was measured for validation. The chemical constituent chosen for inspection through calibration was Dry Matter. The spectral measurements correspond to reflectance model in the range 426 nm - 1686 nm with a resolution of 9 nm.
+For the purpose of analyzing the sample selection problem, we refer to the first sets in both cases as selection set, the samples chosen by the different methods constitute the calibration set and the samples on the second sets represent the test set. The descriptive statistics of the sample sets are shown in Table \ref{tab_descriptive_statistics}.
 
-\textbf{Preprocessing:} For the purpose of studying unsupervised sample selection for satisfactory calibration models, only mean centering preprocessing was used in all cases. Intuitively and after a few experiments, it was seen that assuming certain preprocessing filters for the spectral measurements prior to any knowledge of the $y$ values might be harmful for the resulting model.
+\textbf{Preprocessing:} For the purpose of studying unsupervised sample selection for satisfactory calibration models, only mean centering preprocessing was used in all cases. Based on initial experiments, it was seen that assuming certain preprocessing filters for the spectral measurements prior to any knowledge of the $y$ values might be harmful for the resulting model. 
 
 \begin{table*}[t]
 \centering
@@ -203,23 +206,23 @@ Case study	& set & size & mean($y$) & std($y$)  	\\
 
 \subsubsection*{Exhaustive evaluation for unsupervised sample selection}
 
-We set up an exhaustive evaluation consisting in combining three main factors involved into the problem of interest: Method, input dimensionality and sample size. We aimed to evaluate the real impact of each of this factors by selecting subsets of samples for each possibility resulting from combining the different options of these factors.  
+We set up an exhaustive evaluation consisting in combining three main factors involved into the problem of interest: Method, input dimensionality and sample size. We aimed to evaluate the impact of each of these factors on model performance by selecting subsets of samples for each possible combination of these factors. We explain here the definition of each factor and their possible values are listed in Table \ref{tab_samplesel_settings_exhaustive_search}.
 
 \textbf{Selection methods}
 
-There are multiple methods in the state of the art for sample selection based on the available matrix $\mathbf{X}$. After revising the literature on chemometrics and calibration models, the methods selected for the present work were: Kennard Stone (KS), Duplex (D), Puchwein (P), complete linkage hierarchical clustering (CL) and D-optimal designs based on the optfederov algorithm (D-OPT). In addition, we included random selection (RS). 
+There are multiple methods in the state of the art for sample selection based on the available matrix $\mathbf{X}$. After revising the literature on chemometrics and calibration models, the methods selected for the present work were: Kennard Stone (KS) \cite{Kennard1969}, Duplex (DUP) \cite{Snee1977}, Puchwein (PUCH)\cite{Puchwein1988}, complete linkage hierarchical clustering (CL) \cite{Naes1990} and D-optimal designs based on the Federov algorithm (D-OPT) \cite{Goos2011}. In addition, we included random selection (RS). 
 
 \textbf{Input dimensionality}
 
-The available spectral measurements stored in matrix $\mathbf{X}_{N\times p}$ correspond to an input dimensionality of $p$. However, due to the rank deficit of $\mathbf{X}$, it is also possible to reduce the input dimensionality for sample selection via principal component analysis (PCA) scores, therefore defining an input matrix $\mathbf{T}_{N\times a}$ of $a$ PC scores, which sets a range for the input dimensionality $a$. The value of $a$ should not be confused with the $VC$ dimension for the PLSR model $d$. Based on the evaluation of the current cases and results seen in the literature of chemometrics, the maximum number for $a$ was set to 25.
+The available spectral measurements stored in matrix $\mathbf{X}_{N\times p}$ correspond to an input dimensionality of $p$. However, due to the rank deficit of $\mathbf{X}$, it is also possible to reduce the input dimensionality for sample selection via principal component analysis (PCA) scores, therefore defining an input matrix $\mathbf{T}_{N\times a}$ of $a$ PC scores, which sets a range for the input dimensionality $a$. The value of $a$ should not be confused with the $VC$ dimension for the PLSR model $d$. Based on the evaluation of the current cases and results seen in the literature of chemometrics, the range of $a$ was set from 1 to 25 in addition to $a=p$. 
 
 \textbf{Sample size}
 
-The minimum sample size was set to 30 samples. The sample size range was considered in steps of 10 from 30 to the maximum number of samples available in the selection set for each case study. 
+Based on the maximum number of principal components ($a=25$), the minimum sample size was set to 30 samples. The sample size range was considered in steps of 10 from 30 to the maximum number of samples available in the selection set for each case study. 
 
 \textbf{Constraints}
 
-For the distance-based selection methods (KS,D,P,CL), a mahalanobis distance was used when the input matrix was set to $\mathbf{T}$ and an euclidean distance measure was used for the input matrix $\mathbf{X}$. This is decided because the inverse of the covariance matrix $\mathbf{S}$ to be used in the mahalanobis distance becomes too unstable due to the rank deficiency. For the same reason, the selection based on OPT can be made only with input matrix $\mathbf{T}$. 
+For the distance-based selection methods (KS,DUP,PUCH,CL), a mahalanobis distance was used for $a=1,...,25$ and a euclidean distance measure was used for $a=p$. This is decided because the inverse of the covariance matrix $\mathbf{S}$ if $a=p$ to be used in the mahalanobis distance becomes highly unstable due to its rank deficiency. For the same reason, the selection based on D-OPT can be made only for $a=1,...,25$. 
 
 \begin{table*}[t]
 \centering
@@ -229,8 +232,8 @@ Selection method	& Input dimensionality	& Sample size	\\
 \hline
 
 KS & 1 PC   & 30  \\
-D &  . & 40\\
-P &  . & . \\
+DUP &  . & 40\\
+PUCH &  . & . \\
 CL & . & . \\
 D-OPT & 25 PC's & .\\
 RS & $p$ & $N$\\
@@ -244,15 +247,15 @@ RS & $p$ & $N$\\
 
 \subsubsection*{Analysis of covariance matrix $\mathbf{S}$}
 
-We evaluated the equivalence or congruence between the covariance matrix based on the full available sample of size $N$ ($\mathbf{S}_N$) and a covariance matrix based on a subset of size $n$ ($\mathbf{S}_n$) through the correspondence of their eigenvectors and the eigenvalues. The spectral value decomposition of $\mathbf{S}_N = \mathbf{V_N \Delta_N V'_N}$ and $\mathbf{S}_n = \mathbf{V_n \Delta_n V'_n}$ was calculated. The eigenvalues were compared by calculating the ratio  $\Delta_n/\Delta_N$ and the eigenvectors were compared by computing the absolute value of the determinant for the matrix $V'_nV_N$ setting a value for the rank. 
+We evaluated the equivalence or congruence between the covariance matrix based on the full available sample of size $N$ ($\mathbf{S}_N$) and a covariance matrix based on a subset of size $n$ ($\mathbf{S}_n$) through the correspondence of their eigenvectors and the eigenvalues. The spectral value decomposition of $\mathbf{S}_N = \mathbf{V_N \Delta_N V'_N}$ and $\mathbf{S}_n = \mathbf{V_n \Delta_n V'_n}$ was calculated. The eigenvalues were compared by calculating the ratio  $\Delta_n/\Delta_N$ and the eigenvectors were compared by computing the absolute value of the determinant for the matrix $V'_nV_N$ setting a value for the rank.
 
 \subsubsection*{Multivariate calibration models}
 
-The PLSR models were trained using the SIMPLS algorithm. For each selection setting as explained in table \ref{tab_samplesel_settings_exhaustive_search}, a PLSR model was calibrated with the selected samples and applied on the separated test set for each case study. The performance of the model corresponded to the root mean squared error (RMSE) on the test set in a range from 1 to 30 latent variables. 
+The PLSR models were trained using the SIMPLS algorithm \cite{DeJong1993}. For each selection setting as explained in Table \ref{tab_samplesel_settings_exhaustive_search}, a PLSR model was calibrated with the selected samples and applied on the separated test set for each case study. The performance of the model corresponded to the root mean squared error (RMSE)  on 10-fold crossvalidation and the test set in a range from 1 to 30 latent variables. 
 
 \subsection*{Computational tools}
 
-The complete analysis was programmed and run in Python 3.7. The selection methods, excluding D-OPT, were programmed in house as well as the SIMPLS algorithm. The D-OPT method was used in a connection from R to Python, using the function \texttt{optfederov} from the R-package \emph{AlgDesign}. The exhaustive sample selection and subsequent PLSR calibrations was embedded into a loop which was highly optimized using \texttt{numba} for Python. It was possible to fit more than 5000 PLSR models including crossvalidation results in 10 minutes in an 64-bit Inter Core i7 vPro 8th generation with 16 GB of RAM. 
+The complete analysis was programmed and run in Python 3.7. The selection methods, excluding D-OPT, were programmed in house as well as the SIMPLS algorithm. The D-OPT method was used in a connection from R to Python, using the function \texttt{optfederov} from the R-package \emph{AlgDesign}\cite{Wheeler2019}. The exhaustive sample selection and subsequent PLSR calibrations was embedded into a loop which was highly optimized using \texttt{numba} for Python \cite{Lam2015}. It was possible to fit more than 5000 PLSR models including crossvalidation results in 10 minutes in an 64-bit Inter Core i7 vPro 8th generation with 16 GB of RAM. 
 
 
 % -----------------------------------------------------
@@ -263,35 +266,33 @@ The complete analysis was programmed and run in Python 3.7. The selection method
 
 \subsection*{General framework}\label{results:genframework}
 
-\emph{Can  we  find  specific  thresholds  for  the  optimal  sample  size  in  particular  for  calibration  models  in chemometrics based on the ratio $n/d?$}
+\emph{Can  we  find  particular  thresholds  regarding the optimal sample size for satisfactory PLSR models in chemometrics based on the ratio $n/d?$}
 
-We aimed to answer this question by gathering the results in terms of performance from all the models calibrated in the exhaustive evaluation. In total, for the Milk case there were 5360 models and for the Manure case there were 7210 models. In order to show the effect of the the ratio $n/d$, an \emph{optimal} complexity $d$ needed to be established. Such an optimal complexity was chosen based on the performance in crossvalidation (RMSECV) and prediction error (RMSEP) when using the total number of samples available in the selection set. Figure \ref{fig_d01_milk_general_framework} (a) shows the RMSE curves for crossvalidation and test where it can be seen that for lactose the optimal complexity happens to be between 16 and 18 at least when no special preprocessing is involved. Therefore, to analyze the ratio $n/d$ using the lactose prediction, $d$ was fixed as 16,17 and 18 latent variables. In the case of Manure, the same choices were made based on the RMSE curves shown in Figure \ref{fig_d02_manure_general_framework} (a). Taking the separation between RMSECV and RMSEP and the increasing point for each curve, the optimal complexity for DM was set as $d = 11,12,13 \text{ and } 14$. 
+We aimed to answer this question by gathering the results in terms of performance from all the models calibrated in the exhaustive evaluation. In total, for the Milk case there were 5360 models and for the Manure case there were 7210 models. In order to show the effect of the the ratio $n/d$, an \emph{optimal} complexity $d$ needed to be established. Such an optimal complexity was chosen based on the performance in crossvalidation (RMSECV) and prediction error (RMSEP) when using the total number of samples available in the selection set. Figure \ref{fig_d01_milk_general_framework} (a) shows the RMSE curves for crossvalidation and test where it can be seen that for lactose the optimal complexity happens to be between 16 and 18 \cite{Diaz-Olivares2020}. Therefore, to analyze the ratio $n/d$ using the lactose prediction, $d$ was fixed as 16,17 and 18 latent variables. In the case of Manure, the same choices were made based on the RMSE curves shown in Figure \ref{fig_d02_manure_general_framework} (a). Taking the separation between RMSECV and RMSEP and the increasing point for each curve, the optimal complexity for DM was set as $d = 11,12,13 \text{ and } 14$ using only mean-centering preprocessing \cite{Saeys2005}. 
 
-Figures \ref{fig_d01_milk_general_framework}(b) and \ref{fig_d02_manure_general_framework}(b) shown the RMSEP values as a function of the ratio $n/d$ for the chosen optimal complexities in each case study. To answer the current question, it was observed that when gathering all the possible sample selection settings, there is a clear stabilization of the prediction error as a function of the ratio of interest. Before a ratio of 10, there is quite some uncertainty in the prediction performance of the models, where therefore the sample size was small compared to the optimal complexity of the calibration model. However, in the prediction of lactose, a stabilization threshold could be obtained as $n/d>12$. Because of the available number of samples (316), for the chosen optimal complexity, the maximum ratio could not surpass 20. Interestingly, a similar result was observed in the prediction of DM. A jump was observed after a ratio of 12 and then a final stabilization point was detected as $n/d>16$. In both of the cases, the highest uncertainty for the performance of the calibration model was obtained in $n/d<10$. For these specific cases, this insight suggests that if the model complexity for lactose would not be less than 16 latent variables, the minimum sample size is $16*10=160$. For the case of DM, the minimum sample size should then not be less than $11*10=110$. 
+Figures \ref{fig_d01_milk_general_framework}(b) and \ref{fig_d02_manure_general_framework}(b) show the RMSEP values as a function of the ratio $n/d$ for the chosen optimal complexities in each case study. To answer the current question, it was observed that when gathering all the possible sample selection possibilities, there is a clear stabilization of the prediction error as a function of the ratio of interest. Before a ratio of 10, there is clear uncertainty in the prediction performance of the models, where therefore the sample size was small compared to the optimal complexity of the calibration model. However, in the prediction of lactose, a stabilization threshold could be obtained as $n/d>12$ obtaining similar performance as reported in previous works\cite{Diaz-Olivares2020, Aernouts2011}. Because of the available number of samples (316), for the chosen optimal complexity, the maximum ratio could not surpass 20. Interestingly, a similar result was observed in the prediction of DM. A jump was observed after a ratio of 12 and then a final stabilization point was detected as $n/d>16$ reaching similar performance as obtained in the reference work\cite{Saeys2005}. In both of the cases, the highest uncertainty for the performance of the calibration model was obtained in $n/d<10$. For these specific cases, this insight suggests that if the model complexity for lactose would not be less than 16 latent variables, the minimum sample size is $16*10=160$. For the case of DM, the minimum sample size should then not be less than $11*10=110$. 
 
 \begin{figure}[b]
-\includegraphics[width=0.7\textwidth]{manuscript/figures/d01_milk_general_framework.png}
+\includegraphics[width=0.8\textwidth]{manuscript/figures/d01_milk_general_framework.png}
 \centering
-\caption{}
+\caption{(a) RMSECV based on the complete selection set and RMSEP for Milk data set. (b) RMSEP values as function of the ratio $n/d$ for 16, 17 and 18 latent variables as indicated in colorbar.}
 \label{fig_d01_milk_general_framework}
 \end{figure}
 
 \begin{figure}[b]
-\includegraphics[width=0.7\textwidth]{manuscript/figures/d02_manure_general_framework.png}
+\includegraphics[width=0.8\textwidth]{manuscript/figures/d02_manure_general_framework.png}
 \centering
-\caption{}
+\caption{(a) RMSECV based on the complete selection set and RMSEP for Manure data set. (b) RMSEP values as function of the ratio $n/d$ for 11 to 14 latent variables as indicated in colorbar}
 \label{fig_d02_manure_general_framework}
 \end{figure}
 
 \subsection*{Specific framework}\label{results:specframework}
 
-\emph{How can we evaluate the equivalence between the matrices $\mathbf{S}$ of different sample sizes when using the sota methods for selection?}
+\emph{Is there any relationship between eigenvectors and eigenvalues of $\mathbf{S}_N$ and $\mathbf{S}_n$ as a function of the sample size}
 
-As stated in the introduction for the specific framework, the mathematical element that can be controlled for the sake of the resulting PLSR model is $\mathbf{S}$, the covariance matrix of $\mathbf{X}$. In the context of chemometrics, in almost all the applications, $\mathbf{S}$ is a rank deficient matrix, and therefore we study the structure of this matrix via its SVD. 
+As stated in the introduction for the specific framework, the mathematical element that can be controlled to calibrate PLSR models is $\mathbf{S}$, the covariance matrix of $\mathbf{X}$. The analysis of equivalence or congruence between $\mathbf{S}_N$ and $\mathbf{S}_n$ was done by comparing the eigenvectors and eigenvalues of the matrices. Figure \ref{fig_specific_framework_detereigevect} shows the comparison of the eigenvectors of $\mathbf{S}_N$ and $\mathbf{S}_n$ for both of the case studies when the sample selection was made with $a=15,20,\text{and} 25$. These values of $a$ corresponded to rank values going beyond the number of dimensions that accumulate more than 99.99\% of variance in both case studies.
 
-The analysis of equivalence or congruence between $\mathbf{S}_N$ and $\mathbf{S}_n$ was done by comparing the eigenvectors and eigenvalues of the matrices. Figure \ref{fig_specific_framework_detereigevect} shows the comparison of the eigenvectors for both of the case studies for an SVD rank of $a=25$. The value of this rank was rather beyond the number of dimensions that accumulate more than 99.99\% of variance. Interestingly, in the Milk case it can be seen that the random selection has a very large oscillation of the determinant for $n<160$. For the Manure case, the determinant under random selection is highly variable for $n<210$ which is 50\% of the observations. 
-
-Duplex, being a sample selection method aiming at separating the sample into 2 similar parts, shows its disadvantage for unsupervised sample selection as the assumption that the data can be separated into 2 parts allows to optimality select only a number of samples less than 50\% of the samples available. For the other selection methods, the behaviour of this determinant was very similar. In particular, for the minimum sample size which was 30 samples, D-OPT had the highest determinant. In the Manure case there was an important result for the determinant for Duplex with 90 samples while being very small at the same point for the clustering method. This type of behaviour suggests that there can be an optimal separation of the $\mathbf{X}$ variability at other thresholds of the sample size. In this regards, while there can be this clear separation in the $\mathbf{X}$ variability, the analysis of the previous section confirmed that the PLSR model complexity needs to be taken into account to decide an optimal sample size. 
+Similar insights could be obtained from both case studies. The comparison of the eigenvectors had a clear difference depending on the input dimensionality $a$. When selecting the samples with 15 and 20 components, a high equivalence of eigenvectors could be obtained with less than 100 samples in both cases. When the 
 
 The second part that needs to be studied for the equivalence of the covariance matrices is the resulting eigenvalues. The eigenvalues account for the variability that the different dimensions contain. It was confirmed that, for unsupervised selection it is or primary importance to take into account exactly the expansion of such a variability. Figure \ref{fig_d01_milk_specific_framework_eigenvalsratio} shows the comparison of the eigenvalues for the Milk case for the different selection methods fixing $a=25$. The curves are colored by the sample size. In this comparison, the same effect of the Duplex algorithm is clearly shown as the ratio of the eigenvalues goes under 1 which is an underestimation of the variability based on total sample.  The selection under KS or Puchwein show that in general there is no underestimation of variability as the eigenvalues ratio stays above 1. However, for small sample sizes it is detected that there is no uniform spanning of the variability as some eigenvalues are twice as large as others. Most interestingly, this discrepancy happens at specific directions of the SVD. The disadvantage of this behaviour is that those directions that have a smaller spanning compared to other ones may harm the real covariability with the $y$ variables which is the risk that we aim to low when selecting samples in an unsupervised setting. 
 
@@ -299,12 +300,36 @@ As clustering is a more robust method compared to the other methods in terms of 
 
 The behaviour of the different methods described for the Milk case were observed also in the analysis of the Manure case as shown in Figure \ref{fig_d02_manure_specific_framework_eigenvalsratio}. It was seen that indeed D-OPT managed to keep the ratio linearly higher as a function of the sample size than the other methods did. This result was particularly clear for the later SVD directions.The expansion of variability for those late directions was kept lower with CL selection.  
 
+\begin{table*}[t]
+\centering
+\begin{tabular}{|cc|cc|} 
+\hline
+\multicolumn{2}{|c|}{Milk (lactose)} & \multicolumn{2}{|c|}{Manure (DM)}\\
+\hline
+pc	& correlation	&  pc & correlation	\\
+\hline
+  1 & -0.1337 & 1 & -0.3132 \\
+  2 & -0.1839 & 2 & -0.6231 \\
+  3 & -0.0239 & 3 & -0.1587 \\
+  4 &  0.2380 & 4 &  0.2220 \\
+  5 &  0.0496 & 5 &  0.4036 \\
+ 16 &  0.0060 & 6 &  0.0299 \\
+ 17 &  0.0266 & 7 & -0.3102 \\
+ 18 &  0.4208 & 8 & 0.0521 \\
+ 19 &  0.1202 & 9 & 0.1543 \\
+ 20 &  0.0759 & 10& 0.0259 \\
+ 21 &  0.3819 &  & \\
+ \hline
+\end{tabular}
+\caption{Pearson correlations between PC's and chemical component based on the selection set}
+\label{tab_correlations}
+\end{table*}
 
 
 \begin{figure*}[t]
     \centering
-    \subfigure[Milk]{\includegraphics[width=0.4\textwidth]{manuscript/figures/d01_milk_specific_framework_detereigevect.png}} 
-    \subfigure[Manure]{\includegraphics[width=0.4\textwidth]{manuscript/figures/d02_manure_specific_framework_detereigevect.png}}
+    \subfigure[Milk]{\includegraphics[width=0.6\textwidth]{manuscript/figures/d01_milk_specific_framework_detereigevect.png}} 
+    \subfigure[Manure]{\includegraphics[width=0.6\textwidth]{manuscript/figures/d02_manure_specific_framework_detereigevect.png}}
     \caption{}
     \label{fig_specific_framework_detereigevect}
 \end{figure*}
@@ -357,6 +382,9 @@ The model performance results shown for the Manure case were suggested similar c
 % -----------------------------------------------------
 % ------------------- discussion  ------------
 % -----------------------------------------------------
+% mention here the work found in the group of Tom Fearn, australia
+% comment on the preprocessing article for sample selection
+% mention the selection of PCs based on the prediction power probability
 
 \section*{Discussion}\label{discussion}
 
