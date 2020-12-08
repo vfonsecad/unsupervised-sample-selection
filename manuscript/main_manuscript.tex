@@ -265,7 +265,7 @@ In addition, in order to support the importance of the equivalence analysis, Pea
 
 The PLSR models were trained using the SIMPLS algorithm \cite{DeJong1993}. For each calibration set, a PLSR model was built and applied on the test set for each case study. The performance of the model corresponded to the root mean squared error on 10-fold crossvalidation (RMSECV) and the test set (RMSEP) in a range for $d$ from 1 to 25 latent variables. 
 
-\subsection{Computational tools}
+\subsubsection{Computational tools}
 
 The complete analysis was programmed in Python 3.7. The selection methods, excluding D-OPT, were programmed in house as well as the SIMPLS algorithm. The D-OPT method was used in a connection from R to Python, using the function \texttt{optfederov} from the R-package \emph{AlgDesign}\cite{Wheeler2019}. The exhaustive sample selection and subsequent PLSR calibrations was embedded into a loop which was highly optimized using \texttt{numba} for Python \cite{Lam2015}. It was possible to fit more than 5000 PLSR models including crossvalidation results in 10 minutes on an 64-bit Inter Core i7 vPro 8th generation with 16 GB of RAM. 
 
