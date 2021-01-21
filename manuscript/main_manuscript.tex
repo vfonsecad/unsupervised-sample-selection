@@ -17,6 +17,7 @@
 \usepackage{subfigure}
 \usepackage{amsfonts}
 \usepackage{multirow}
+\usepackage{float}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% If issues arise when submitting your manuscript, you may want to
@@ -184,11 +185,8 @@ The first case corresponds to the inspection of milk composition where data from
 
 The second case involves NIRS on pig manure samples to measure the composition \cite{Saeys2005}. One set of 420 samples was measured for calibration and a second set of 164 samples was acquired and measured independently to evaluate the model performance. Calibration models were built for dry matter content, which has been shown to dominate the NIR spectra. The spectra were acquired in reflectance mode in the 426 nm - 1686 nm range with a resolution of 9 nm.
 
-To clarify the terminology, the sets from which samples are to be selected will be referred to as original sets and the selected samples from the original sets will constitute the calibration sets. The descriptive statistics of the data sets are summarized in Table \ref{tab_descriptive_statistics}.
 
-\textbf{Preprocessing:} Mean centering preprocessing was used in all cases. Initial experiments were carried out to decide whether to preprocess the data with other specific filters, but this gave unsatisfactory results in the sample selection. It was observed that assuming certain preprocessing filters for the spectral measurements prior to any knowledge of the $y$ values may be harmful to the subsequent calibration models. 
-
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \begin{tabular}{|c|c|c|c|c|} 
 \hline
@@ -205,7 +203,13 @@ Case study	& set & size & mean($y$) & std($y$)  	\\
 \end{tabular}
 \caption{Descriptive statistics}
 \label{tab_descriptive_statistics}
-\end{table*}
+\end{table}
+
+To clarify the terminology, the sets from which samples are to be selected will be referred to as original sets and the selected samples from the original sets will constitute the calibration sets. The descriptive statistics of the data sets are summarized in Table \ref{tab_descriptive_statistics}.
+
+\textbf{Preprocessing:} Mean centering preprocessing was used in all cases. Initial experiments were carried out to decide whether to preprocess the data with other specific filters, but this gave unsatisfactory results in the sample selection. It was observed that assuming certain preprocessing filters for the spectral measurements prior to any knowledge of the $y$ values may be harmful to the subsequent calibration models. 
+
+
 
 \subsection{Methodology}\label{methodology}
 
@@ -217,6 +221,22 @@ An exhaustive evaluation was set up combining three main factors involved into s
 \subsubsection{Factors for unsupervised sample selection}
 
 Three main factors involved in the problem of interest were considered: Method, input dimensionality and sample size. The definition of each factor is explained below and their possible values are listed in Table \ref{tab_samplesel_settings_exhaustive_search}. A calibration set was selected for each possible combination of the three factors.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{|r|l|} 
+\hline
+Selection method & KS, DUP, PUCH, CL, D-OPT, RS\\
+\hline
+Input dimensionality $a$ & 1, 2, ... , 25, $p$ \\
+\hline
+Sample size $n$ & 30, 40, ... , $N$ \\
+\hline
+
+\end{tabular}
+\caption{Sample selection settings}
+\label{tab_samplesel_settings_exhaustive_search}
+\end{table}
 
 \textbf{Selection methods}
 
@@ -245,21 +265,6 @@ Based on the maximum number of principal components ($a=25$), the minimum sample
 
 For the distance-based selection methods (KS,DUP,PUCH,CL), a Mahalanobis distance was used for $a\le 25$.  For $a=p$ a Euclidean distance was used, because the inverse of the covariance matrix $\mathbf{S}$ used in the Mahalanobis distance becomes unstable in this case. For the same reason, the selection based on D-OPT could only be applied for $a=1,...,25$. PUCH selection was originally reported to be stable for non-extreme values of $a$\cite{Puchwein1988}. Thus, PUCH selection was applied only for $a=2,...,25$.
 
-\begin{table*}[t]
-\centering
-\begin{tabular}{|r|l|} 
-\hline
-Selection method & KS, DUP, PUCH, CL, D-OPT, RS\\
-\hline
-Input dimensionality $a$ & 1, 2, ... , 25, $p$ \\
-\hline
-Sample size $n$ & 30, 40, ... , $N$ \\
-\hline
-
-\end{tabular}
-\caption{Sample selection settings}
-\label{tab_samplesel_settings_exhaustive_search}
-\end{table*}
 
 \subsubsection{Equivalence analysis of covariance matrices $\mathbf{S}_n$ and $\mathbf{S}_N$}
 
@@ -281,37 +286,65 @@ The complete analysis was programmed in Python 3.7. The selection methods, exclu
 % ------------------- results  ------------
 % -----------------------------------------------------
 
-\section*{Results}\label{results}
+\section{Results}\label{results}
 
-\subsection*{Statistical learning theory as a general framework}\label{results:genframework}
+\subsection{Statistical learning theory as a general framework}\label{results:genframework}
 
 \emph{Can a particular threshold be found regarding the optimal sample size for satisfactory PLSR models in chemometrics based on the ratio $n/d?$}
 
 The model performance results for all the calibration models built in the exhaustive evaluation were put together in order to find a threshold for the optimal sample size regardless of the selection method or the input dimensionality. In total, 4437 models were built for the prediction of lactose content in milk and 5967 models for the prediction of dry matter content in manure. For the current purpose, the optimal complexity $d$ for the prediction of lactose and dry matter was established as described in the Experimental section. Figure \ref{fig_d01_milk_general_framework}(a) shows the RMSE curves for lactose content in milk obtained in crossvalidation with the original set and test set prediction. Based on the above criteria, the optimal complexity was found between 16 and 18 latent variables, which goes in line with previous reports on the same type of case study \cite{Diaz-Olivares2020}. Therefore, to analyze the ratio $n/d$ using the lactose prediction, $d$ was set to 16, 17 and 18. In the case of manure, the same choices were made based on the RMSE curves shown in Figure \ref{fig_d02_manure_general_framework}(a). Because the two curves diverge from 11 latent variables onwards and the RMSECV becomes flat after 14 latent variables, the optimal complexity for dry matter content was set to $d = 11,12,13 \text{ and } 14$\cite{Saeys2005}. 
 
-Figures \ref{fig_d01_milk_general_framework}(b) and \ref{fig_d02_manure_general_framework}(b) show the RMSEP values as a function of the ratio $n/d$ for the chosen optimal complexities in each case study combining all the results from the exhaustive procedure. A clear stabilization of the prediction error as a function of the ratio of interest can be observed, regardless of the other factors for sample selection. For ratios below 10, there is large variability in the prediction performance of the models, which indicates that the sample size is too small compared to the optimal complexity of the calibration model. In the milk case, similar performance for the prediction of lactose as previously reported \cite{Diaz-Olivares2020, Aernouts2011} was obtained for $n/d>12$. A final drop in the RMSEP in this case was detected for $n/d>16$. It should be noted that the number of samples in the original set ($N$=316) and the chosen optimal complexity accounted for a maximum ratio below 20. Interestingly, a similar trend can be observed in the prediction of the dry matter content in manure. A jump can be observed after a ratio of 12 and then a final stabilization point is reached for $n/d>16$ providing comparable performance as obtained in the reference work, given that the data was only mean-centered in the current work\cite{Saeys2005}. For these specific cases, this indicates that the model complexity of 16 latent variables required for accurate and stable prediction of the lactose content in milk demands that the calibration set contains at least 16*12 = 192 samples. As the optimal model complexity for predicting the dry matter content in manure required 11 latent variables, at least 11*12 = 132 calibration samples would be required. These values can be approximated to nearest multiple of 10 surpassing the threshold $n/d>12$, suggesting samples sizes of 200 for lactose prediction in milk and 140 for dry matter prediction in manure.
 
-\begin{figure}[b]
+\begin{figure}[H]
 \includegraphics[width=0.8\textwidth]{manuscript/figures/d01_milk_general_framework.png}
 \centering
 \caption{Evolution of the error (RMSE) in predicting the lactose content in milk from NIR spectra as a function of (a) the number of latent variables $d$; and (b) the ratio of calibration samples over model complexity $(n/d)$ for $d$ values of 16 to 18.}
 \label{fig_d01_milk_general_framework}
 \end{figure}
 
-\begin{figure}[b]
+\begin{figure}[H]
 \includegraphics[width=0.8\textwidth]{manuscript/figures/d02_manure_general_framework.png}
 \centering
 \caption{Evolution of the error (RMSE) in predicting the dry matter content in manure from NIR spectra as a function of (a) the number of latent variables $d$; and (b) the ratio of calibration samples over model complexity $(n/d)$ for $d$ values of 11 to 14.}
 \label{fig_d02_manure_general_framework}
 \end{figure}
 
-\subsection*{Bilinear modelling as a specific framework}\label{results:specframework}
+Figures \ref{fig_d01_milk_general_framework}(b) and \ref{fig_d02_manure_general_framework}(b) show the RMSEP values as a function of the ratio $n/d$ for the chosen optimal complexities in each case study combining all the results from the exhaustive procedure. A clear stabilization of the prediction error as a function of the ratio of interest can be observed, regardless of the other factors for sample selection. For ratios below 10, there is large variability in the prediction performance of the models, which indicates that the sample size is too small compared to the optimal complexity of the calibration model. In the milk case, similar performance for the prediction of lactose as previously reported \cite{Diaz-Olivares2020, Aernouts2011} was obtained for $n/d>12$. A final drop in the RMSEP in this case was detected for $n/d>16$. It should be noted that the number of samples in the original set ($N$=316) and the chosen optimal complexity accounted for a maximum ratio below 20. Interestingly, a similar trend can be observed in the prediction of the dry matter content in manure. A jump can be observed after a ratio of 12 and then a final stabilization point is reached for $n/d>16$ providing comparable performance as obtained in the reference work, given that the data was only mean-centered in the current work\cite{Saeys2005}. For these specific cases, this indicates that the model complexity of 16 latent variables required for accurate and stable prediction of the lactose content in milk demands that the calibration set contains at least 16*12 = 192 samples. As the optimal model complexity for predicting the dry matter content in manure required 11 latent variables, at least 11*12 = 132 calibration samples would be required. These values can be approximated to nearest multiple of 10 surpassing the threshold $n/d>12$, suggesting samples sizes of 200 for lactose prediction in milk and 140 for dry matter prediction in manure.
+
+
+
+\subsection{Bilinear modelling as a specific framework}\label{results:specframework}
 
 \emph{What is the effect of input dimensionality, sample size and selection method on the equivalence between $\mathbf{S}_N$ and $\mathbf{S}_n$?} 
 
 As the number of combinations of selection method, sample size and input dimensionality $a$ that has been evaluated is very large, the discussion on the degree of equivalence between $\mathbf{S}_N$ and $\mathbf{S}_n$ is limited to few discrete values of the input dimensionality $a$. The impact of the entire range of $a$ on the model performance is presented in the next section. Figure \ref{fig_specific_framework_detereigevect} shows the comparison of the eigenvectors of $\mathbf{S}_N$ and $\mathbf{S}_n$ for both case studies when the sample selection was made for $a=15$, 20 and 25 with each method. These determinant curves indicated how much equivalence there was between the first $a$ eigenvectors of the matrices as a function of the sample size. These curves demonstrated that, indeed, a small sample size could provide equivalence for a small number of eigenvectors. When more ED directions are accounted for, the equivalence of the eigenvectors requires a larger sample size. 
 
+
+\begin{figure}[H]
+    \centering
+    \subfigure[Milk]{\includegraphics[width=0.6\textwidth]{manuscript/figures/d01_milk_specific_framework_detereigevect.png}} 
+    \subfigure[Manure]{\includegraphics[width=0.6\textwidth]{manuscript/figures/d02_manure_specific_framework_detereigevect.png}}
+    \caption{Comparison of eigenvectors when selecting samples with every method and input dimensionality $a=15$ (yellow), $a=20$ (red) and $a=25$ (black).}
+    \label{fig_specific_framework_detereigevect}
+\end{figure}
+
+
+
 Across the different methods, the behavior of the determinant at a fixed $a$ was noticeably related to the sample size, yet differently for the different selection methods. Excluding DUP, all the other methods in both case studies showed similar results for $a=15$ and 20. Determinants above 0.8 were achieved with sample sizes below 30\% of $N$. When setting $a=25$ large differences were observed for the selected calibration sets across the different methods and sample sizes. In both case studies, CL and D-OPT selection showed a jump in the determinant around the same sample sizes. In the manure case, KS related to CL and D-OPT in this behavior, while it was PUCH in the milk case. As expected, due to the nature of selection with DUP creating two equivalent subsets, the determinant presents a decline after crossing 50\% of the samples for selection. However, this decline was obtained for $a=20, 25$ and not for $a=15$ indicating the effect of the input dimensionality. RAND selection did not achieve a clear stabilization of the determinant compared to that of the other selection methods. For KS, PUCH, CL and D-OPT, the stabilization of the determinant for $a=25$ in the milk case occurred at $n=200$, as indicated by the discussed ratio $n/d>12$. In the manure case with the same methods, the stabilization could be claimed for $a=20$ at $n=140$ as determined previously by the same ratio. 
+
+\begin{figure}[H]
+\includegraphics[width=0.8\textwidth]{manuscript/figures/d01_milk_specific_framework_eigenvalsratio.png}
+\centering
+\caption{Comparison of eigenvalues for the milk case study when selecting samples with every method and input dimensionality $a=25$.}
+\label{fig_d01_milk_specific_framework_eigenvalsratio}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=0.8\textwidth]{manuscript/figures/d02_manure_specific_framework_eigenvalsratio.png}
+\centering
+\caption{Comparison of eigenvalues for the manure case study when selecting samples with every method and input dimensionality $a=20$.}
+\label{fig_d02_manure_specific_framework_eigenvalsratio}
+\end{figure}
 
 The comparison of the resulting individual eigenvalues is presented for the selection made with $a = 25$ for the milk case and with $a=20$ for the manure case in Figures \ref{fig_d01_milk_specific_framework_eigenvalsratio} and \ref{fig_d02_manure_specific_framework_eigenvalsratio}. Each curve represents the eigenvalues ratio for a given value of $n$. With the exception of DUP selection, there is a clear convergence towards 1 of these ratios as $n$ increases. This suggests that, ideally, a subset of samples could be selected such that the resulting eigenvalues are uniformly close to the eigenvalues based on the total number of samples. For small sample sizes, a high variation in the ratios occurred revealing that even when selecting the samples with $a=25$ in the milk case and $a=20$ in the manure case, not all ED directions are equally represented in the subsets. Most interestingly, high peaks and valleys could be observed at the same ED directions indistinctly of the selection method. As $n$ increases, the curves become flatter indicating an equitable representation of the individual ED directions. 
 
@@ -319,7 +352,7 @@ In this comparison, the 50\% effect of DUP selection was detected as the curves 
 
 As CL is a more robust method compared to the other methods in terms of control over possible outliers, the eigenvalues ratio is overall more stable and closer to 1 in comparison with the other methods. In the milk case, for very small sample sizes, some ED directions resulted in ratios between 0.5 and 1. D-OPT showed more linearity for the eigenvalues ratio as a function of the sample size compared to the other methods in both case studies. 
 
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \begin{tabular}{|cc|cc|} 
 \hline
@@ -342,36 +375,12 @@ PC	& correlation	&  PC & correlation	\\
 \end{tabular}
 \caption{Pearson correlations between PC's and chemical component based on the selection set}
 \label{tab_correlations}
-\end{table*}
+\end{table}
 
 The possible risk of the non-uniform spanning of variability across the different dimensions was supported by the correlations between PC dimensions and the chemical constituent. Table \ref{tab_correlations} shows the Pearson correlations for both case studies. In the case of the milk data set, PC's 18 and 21 showed higher correlations with lactose than PC's 1 and 2. In the manure case, dry matter content had a higher correlation with PC 5 than PC 1, but the first 10 PC's still accounted for the highest correlations. The impact of diminishing or underestimating the variability at certain dimensions should thus be placed in perspective of the PLSR model performance in the next section. With respect to the equivalence between $\mathbf{S}_N$ and $\mathbf{S}_n$, the degree of equivalence depended on the rank value of $a$ and a more uniform span of variability according to the eigenvalues could be obtained in both case studies for sample sizes corresponding to $n/d>12$.  
 
 
-
-
-\begin{figure*}[t]
-    \centering
-    \subfigure[Milk]{\includegraphics[width=0.6\textwidth]{manuscript/figures/d01_milk_specific_framework_detereigevect.png}} 
-    \subfigure[Manure]{\includegraphics[width=0.6\textwidth]{manuscript/figures/d02_manure_specific_framework_detereigevect.png}}
-    \caption{Comparison of eigenvectors when selecting samples with every method and input dimensionality $a=15$ (yellow), $a=20$ (red) and $a=25$ (black).}
-    \label{fig_specific_framework_detereigevect}
-\end{figure*}
-
-\begin{figure}[b]
-\includegraphics[width=0.8\textwidth]{manuscript/figures/d01_milk_specific_framework_eigenvalsratio.png}
-\centering
-\caption{Comparison of eigenvalues for the milk case study when selecting samples with every method and input dimensionality $a=25$.}
-\label{fig_d01_milk_specific_framework_eigenvalsratio}
-\end{figure}
-
-\begin{figure}[b]
-\includegraphics[width=0.8\textwidth]{manuscript/figures/d02_manure_specific_framework_eigenvalsratio.png}
-\centering
-\caption{Comparison of eigenvalues for the manure case study when selecting samples with every method and input dimensionality $a=20$.}
-\label{fig_d02_manure_specific_framework_eigenvalsratio}
-\end{figure}
-
-\subsection*{Model performance}\label{results:modperformance}
+\subsection{Model performance}\label{results:modperformance}
 
 
 \emph{What are the most optimal conditions of the three factors for satisfactory PLSR models?}
@@ -379,7 +388,7 @@ The possible risk of the non-uniform spanning of variability across the differen
 The simultaneous effect of the three selection factors on the performance of PLSR models was analyzed by comparing the RMSEP curves for each case study. The grid in Figures \ref{fig_d01_milk_model_performance} and \ref{fig_d02_manure_model_performance} shows the PLSR model performance for the milk and the manure case study, respectively. The selection methods are accommodated row-wise, punctual sample sizes are positioned column-wise and the color of the curves represents the input dimensionality. 
 
 
-\begin{figure}[b]
+\begin{figure}[H]
 \includegraphics[width=0.8\textwidth]{manuscript/figures/d01_milk_model_performance.png}
 \centering
 \caption{Model performance to predict lactose content according to selection method, input dimensionality and sample size. The red line represents input dimensionality $a=p$.}
@@ -388,18 +397,20 @@ The simultaneous effect of the three selection factors on the performance of PLS
 
 In both case studies, RAND selection resulted in larger variability in the model performance as the sample size decreased. For sample sizes as large as $260/16 > 16$ in the lactose prediction and $180/11 > 16$ in the prediction of dry matter content, RAND selection rendered calibration sets that were closely optimal to the sets delivered by any other selection method. 
 
+\begin{figure}[H]
+\includegraphics[width=0.8\textwidth]{manuscript/figures/d02_manure_model_performance.png}
+\centering
+\caption{Model performance to predict dry matter content according to selection method, input dimensionality and sample size. The red line represents input dimensionality $a=p$.}
+\label{fig_d02_manure_model_performance}
+\end{figure}
+
+
 In the prediction of lactose, the model performance for the selected sets of size $n=60$ was highly uncertain and no clear relation was found between a satisfactory performance and the selection method or the input dimensionality. Nonetheless, for such a small $n$, the selected calibration sets by D-OPT with $a \ge 15$ consistently produced models with better performance than the other methods. Similar results were obtained with D-OPT for other small sample sizes ($n=90$ and $n=120$). This differentiation of the effect of the input dimensionality was not equally clear for small sample sizes with the other methods. Moreover, when selecting samples based on the original $\mathbf{X}$ matrix (i.e. $a=p$), there was no satisfactory result for the small sample sizes compared to values of $a$ between 15 and 25. When taking 200 samples, according to 200/16>12, the performance of the models with the different methods and input dimensionality stabilized and no important or systematic difference was observed, especially for RMSEP values at $d=16, 17$ and 18.
 
 The model performances obtained for the manure case suggest similar conclusions on the effect of the factors as in the milk case study. In particular, for small sample sizes such as $n=60$ and $n=90$, D-OPT and PUCH selection showed a more stable performance around $d = 11$ when selecting samples with $a \ge 20$ than the performance stability of the other methods. Once the threshold $n/d>12$ was reached, which happened at 140 samples taking $d=11$, KS, PUCH and D-OPT with $a$ between 20 and 25 rendered calibration sets with satisfactory performance, especially around the optimal complexity. 
 
 
 
-\begin{figure}[b]
-\includegraphics[width=0.8\textwidth]{manuscript/figures/d02_manure_model_performance.png}
-\centering
-\caption{Model performance to predict dry matter content according to selection method, input dimensionality and sample size. The red line represents input dimensionality $a=p$.}
-\label{fig_d02_manure_model_performance}
-\end{figure}
 
 % -----------------------------------------------------
 % ------------------- discussion  ------------
@@ -407,7 +418,7 @@ The model performances obtained for the manure case suggest similar conclusions 
 
 
 
-\section*{Discussion}\label{discussion}
+\section{Discussion}\label{discussion}
 
 When positioning the PLSR algorithm in the general framework of statistical learning theory, it was found that the sample size needed to establish multivariate calibration models is determined by the $VC$ dimension (i.e. model complexity). This means that a different sample size $n$ will be required for an easy-to-predict dominant chemical constituent than for a minor constituent that is harder to predict. The same idea was commented by Schoot about the sample size for calibration models of different products \cite{Schoot2020}, although no further analysis was provided to explain it. This insight was revealed by the analysis of the ratio $n/d$ and the optimal sample sizes obtained in each case study. The level of easiness to predict is what the $VC$ dimension or model complexity represents. It was confirmed that a ratio $n/d>20$ accounts for a sample size that is rather large for a satisfactory calibration model. Based on the results of the present study, for which a hard-to-predict constituent (lactose in milk) and an easier constituent (dry matter in manure) were analyzed, evidence was obtained that a satisfactory calibration model can be built with $n/d>12$. While unsupervised sample selection is performed at a stage when no data on the target variable $y$ is available yet, it may be possible to estimate $d$ based on the literature and expert knowledge on the problem at hand.
 
@@ -428,23 +439,25 @@ However, initial experiments in the current case studies suggested that assuming
 % ------------------- a scheme  ------------
 % -----------------------------------------------------
 
-\section*{A guideline for selecting the most informative calibration samples}\label{scheme}
-
-The higher-mentioned conclusions from the exhaustive comparison of the factors involved in unsupervised sample selection can be summarized in a guideline for the establishment of multivariate calibration models, as visualized in Figure \ref{fig_scheme}. After defining a suitable value for the PLSR model complexity $d$ based on expert knowledge and literature, the optimal sample size $n$ can be calculated as 12$d+1$. Once $n$ has been calculated, a value for the input dimensionality $a$ can be found by evaluating at what value of $a>d$ there is convergence in equivalence between $\mathbf{S}_N$ and $\mathbf{S}_n$. This ensures that the dimensions included in the selection account for PC's of small variability that can be beneficial for the PLSR model if a hard-to-predict constituent is involved. The samples can be selected with KS, PUCH, CL or D-OPT, evaluating which method delivers the best equivalence of the covariance matrices based on their eigendecompositions. It is recommended to analyze the presence of potential outliers, in particular when using D-OPT selection. In the presence of outliers, the dimensionality reduction prior to the sample selection can be performed with robust PCA \cite{Hubert2005}.
+\section{A guideline for selecting the most informative calibration samples}\label{scheme}
 
 
-\begin{figure}[b]
+\begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{manuscript/figures/scheme.png}
 \centering
 \caption{Proposed guideline for unsupervised sample selection in multivariate calibration}
 \label{fig_scheme}
 \end{figure}
 
+The higher-mentioned conclusions from the exhaustive comparison of the factors involved in unsupervised sample selection can be summarized in a guideline for the establishment of multivariate calibration models, as visualized in Figure \ref{fig_scheme}. After defining a suitable value for the PLSR model complexity $d$ based on expert knowledge and literature, the optimal sample size $n$ can be calculated as 12$d+1$. Once $n$ has been calculated, a value for the input dimensionality $a$ can be found by evaluating at what value of $a>d$ there is convergence in equivalence between $\mathbf{S}_N$ and $\mathbf{S}_n$. This ensures that the dimensions included in the selection account for PC's of small variability that can be beneficial for the PLSR model if a hard-to-predict constituent is involved. The samples can be selected with KS, PUCH, CL or D-OPT, evaluating which method delivers the best equivalence of the covariance matrices based on their eigendecompositions. It is recommended to analyze the presence of potential outliers, in particular when using D-OPT selection. In the presence of outliers, the dimensionality reduction prior to the sample selection can be performed with robust PCA \cite{Hubert2005}.
+
+
+
 % -----------------------------------------------------
 % ------------------- conclusions  ------------
 % -----------------------------------------------------
 
-\section*{Conclusions}\label{conclusions}
+\section{Conclusions}\label{conclusions}
 
 The positioning of PLSR models in the general framework of statistical learning theory allowed to establish an objective threshold for the optimal sample size to build this type of calibration models, namely $n/d>12$. It was demonstrated that the input dimensionality $a$ plays an important role in the challenge of unsupervised sample selection and that PC dimensions of low variability may still be important to select the most informative samples depending on the dominance of the target chemical constituent. The methods that have been a standard for sample selection in multivariate calibration proved to be equally useful for this challenge after controlling the sample size and the input dimensionality. Random selection was found to require larger sample sizes. 
 
