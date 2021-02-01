@@ -1,97 +1,99 @@
+%% 
+%% Copyright 2007-2020 Elsevier Ltd
+%% 
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%% 
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%% 
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%% 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% This is a (brief) model paper using the achemso class
-%% The document class accepts keyval options, which should include
-%% the target journal and optionally the manuscript type.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[journal=ancham,manuscript=article]{achemso}
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%% SP 2008/03/01
+%%
+%% 
+%%
+%% $Id: elsarticle-template-num.tex 190 2020-11-23 11:12:32Z rishi $
+%%
+%%
+\documentclass[preprint,12pt]{elsarticle}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Place any additional packages needed here.  Only include packages
-%% which are essential, to avoid problems later.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{chemformula} % Formula subscripts using \ch{}
-\usepackage{achemso}
-\usepackage[T1]{fontenc} % Use modern font encodings
+%% Use the option review to obtain double line spacing
+%% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% For including figures, graphicx.sty has been loaded in
+%% elsarticle.cls. If you prefer to use the old commands
+%% please give \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{subfigure}
 \usepackage{amsfonts}
 \usepackage{multirow}
 \usepackage{float}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% If issues arise when submitting your manuscript, you may want to
-%% un-comment the next line.  This provides information on the
-%% version of every file you have used.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%\listfiles
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers.
+%% \usepackage{lineno}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Place any additional macros here.  Please use \newcommand* where
-%% possible, and avoid layout-changing macros (which are not used
-%% when typesetting).
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand*\mycommand[1]{\texttt{\emph{#1}}}
+\journal{Chemometrics and Intelligent Laboratory Systems}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Meta-data block
-%% ---------------
-%% Each author should be given as a separate \author command.
-%%
-%% Corresponding authors should have an e-mail given after the author
-%% name as an \email command. Phone and fax numbers can be given
-%% using \phone and \fax, respectively; this information is optional.
-%%
-%% The affiliation of authors is given after the authors; each
-%% \affiliation command applies to all preceding authors not already
-%% assigned an affiliation.
-%%
-%% The affiliation takes an option argument for the short name.  This
-%% will typically be something like "University of Somewhere".
-%%
-%% The \altaffiliation macro should be used for new address, etc.
-%% On the other hand, \alsoaffiliation is used on a per author basis
-%% when authors are associated with multiple institutions.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\author{Valeria Fonseca Diaz}
-\email{valeria.fonsecadiaz@kuleuven.be}
-\author{Bart De Ketelaere}
-\email{bart.deketelaere@kuleuven.be}
-\author{Ben Aernouts}
-\email{ben.aernouts@kuleuven.com}
-\altaffiliation{Animal and Human Health Engineering, Geel Campus, Kleinhoefstraat 4, 2440 Geel, Belgium}
-\author{Wouter Saeys}
-\email{wouter.saeys@kuleuven.be}
-\affiliation[KU Leuven]
-{KU Leuven, Mechatronics, Biostatistics and Sensors (MeBioS), Kasteelpark
-Arenberg 30, 3001 Leuven, Belgium}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% The document title should be given as usual. Some journals require
-%% a running title from the author: this should be supplied as an
-%% optional argument to \title.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title[An \textsf{achemso} demo]
-  {Cost-efficient unsupervised sample selection for multivariate calibration}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Some journals require a list of abbreviations or keywords to be
-%% supplied. These should be set up here, and will be printed after
-%% the title and author information, if needed.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\abbreviations{IR,NMR,UV}
-\keywords{sample selection, multivariate calibration, NIR, PLS}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% The manuscript does not need to include \maketitle, which is
-%% executed automatically.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% -----------------------------------------------------
-% -------------------BEGIN DOCUMENT ------------
-% -----------------------------------------------------
 
 \begin{document}
 
+% -----------------------------------------------------
+% ------------------- highlights  ------------
+% -----------------------------------------------------
+\begin{highlights}
+\item The problem of unsupervised sample selection for multivariate calibration is defined as finding a subset of samples that would render a calibration model of comparable performance to the model that would result if the full available sample set were submitted to reference analyses.
+\item The optimal sample size for a multivariate calibration model depends on the complexity of such a model.
+\item It is possible to evaluate the quality of the selected samples for PLSR calibration models by comparing the covariance matrix based on the selected subset with the covariance matrix based on the full available sample set.
+\item By controlling the sample size and the input dimensionality, the state-of-the-art sample selection algorithms render subsets of samples with comparable quality for the calibration model.
+\end{highlights}
+
+\begin{frontmatter}
+% -----------------------------------------------------
+% ------------------- title  ------------
+% -----------------------------------------------------
+
+\title{Cost-efficient unsupervised sample selection for multivariate calibration}
+
+% -----------------------------------------------------
+% ------------------- authors  ------------
+% -----------------------------------------------------
+\author[mebios]{Valeria Fonseca Diaz\corref{mycorrespondingauthor}}
+\cortext[mycorrespondingauthor]{Corresponding author}
+\ead[url]{biw.kuleuven.be/biosyst/mebios/biophotonics-group}
+\ead[mail]{valeria.fonsecadiaz@kuleuven.be}
+
+\author[mebios]{Bart De Ketelaere}
+\author[mebios,a2h]{Ben Aernouts}
+\author[mebios]{Wouter Saeys}
+
+
+\address[mebios]{KU Leuven, Division of Mechatronics, Biostatistics and Sensors, Kasteelpark Arenberg 30, 3001 Leuven, Belgium}
+\address[a2h]{KU Leuven, Animal and Human Health Engineering, Geel Campus, Kleinhoefstraat 4, 2440 Geel, Belgium}
 
 % -----------------------------------------------------
 % ------------------- abstract  ------------
@@ -100,6 +102,26 @@ Arenberg 30, 3001 Leuven, Belgium}
 Indirect quantification of chemical composition through spectral measurements requires the establishment of multivariate calibration models. The reference analyses on the calibration samples typically form a major cost factor in the establishment of these multivariate models. Therefore, the aim of this study was to select the most informative calibration samples in an unsupervised way based on the spectral measurements. To this end, guidelines to address this challenge in PLSR model building have been developed. The recommendations include calculating a sample size that surpasses the model complexity by a factor of 12, performing the selection in the PCA score space spanned by a sufficiently large number of principal components and using methods such as Kennard-Stone, Puchwein, Clustering or D-optimal designs.
 
 \end{abstract}%
+
+
+% -----------------------------------------------------
+% ------------------- keywords  ------------
+% -----------------------------------------------------
+
+\begin{keyword}
+sample selection \sep unsupervised learning \sep multivariate calibration \sep NIR \sep PLS regression
+%% keywords here, in the form: keyword \sep keyword
+
+%% PACS codes here, in the form: \PACS code \sep code
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+\end{keyword}
+
+\end{frontmatter}
+
+%% \linenumbers
 
 % -----------------------------------------------------
 % ------------------- introduction  ------------
@@ -152,6 +174,7 @@ In bilinear modelling, the basis of $L_2$ is what is known as the set of latent 
 For a given value of $d$, the set of the resulting $d$ latent variables constitute a set of orthonormal variables $\{\phi_{k}(\mathbf{x})\}_{i=1}^d$. However, the set of loading vectors $\{\mathbf{v}_k\}$ is defined as $\mathbf{S}$-orthogonal, given that $\mathbf{v}_k'\mathbf{S}\mathbf{v}_j = 0 \quad (j<k)$, where $\mathbf{S}$ is the covariance matrix of $\mathbf{X}$. The $\mathbf{S}$-orthogonality property of the PLSR algorithm indicates that the estimation of this type of regression model depends highly on the covariance matrix $\mathbf{S}$. This property suggests that if $n<N$ samples are found as $\mathbf{X}_{n \times p} \subset \mathbf{X}_{N \times p}$ such that $\mathbf{S}_n$ and $\mathbf{S}_N$ are equivalent, the unsupervised selection method would not discard information that is crucial for building the PLSR model by discarding the $N-n$ remaining samples, rendering the $n$ most informative samples.
 
 Several methods and indexes have been proposed to study the equivalence between two matrices \cite{Tomic2013}. For the sake of bilinear regression models such as PLSR, it becomes manifest to evaluate this equivalence via the eigendecomposition (ED) of the matrices due to the rank deficiency of $\mathbf{S}$ in spectroscopy applications. Two criteria to quantify the equivalence arise from the ED. On the one hand, two matrices with the same eigenvectors are regarded as congruent matrices, which is a type of equivalence relationship\cite{Horn1985}. On the other hand, as the ED of $\mathbf{S}$ constitutes the theory of principal component analysis (PCA), the eigenvalues of $\mathbf{S}$ account for the variability that the individual dimensions contain and their relative predictive power for a regression model \cite{Artemiou2013}. Thus, the variability explained by two matrices can be compared based on their eigenvalues. Although this comparison directly relates to principal component regression (PCR), the present work focuses on the role of matrix $\mathbf{S}$ in PLSR models.
+
 
 % -----------------------------------------------------
 % ------------------- research questions  ------------
@@ -208,8 +231,6 @@ Case study	& set & size & mean($y$) & std($y$)  	\\
 To clarify the terminology, the sets from which samples are to be selected will be referred to as original sets and the selected samples from the original sets will constitute the calibration sets. The descriptive statistics of the data sets are summarized in Table \ref{tab_descriptive_statistics}.
 
 \textbf{Preprocessing:} Mean centering preprocessing was used in all cases. Initial experiments were carried out to decide whether to preprocess the data with other specific filters, but this gave unsatisfactory results in the sample selection. It was observed that assuming certain preprocessing filters for the spectral measurements prior to any knowledge of the $y$ values may be harmful to the subsequent calibration models. 
-
-
 
 \subsection{Methodology}\label{methodology}
 
@@ -466,6 +487,7 @@ The proposed scheme was developed in the context of PLSR models. However, most m
 The criterion based on the equivalence between $\mathbf{S}_N$ and $\mathbf{S}_n$ is specific for bilinear models such as PLSR, PLS discriminant analysis, linear regression, among others. Further research is recommended to refine this criterion of equivalence and to propose a sample selection algorithm aimed at optimizing this equivalence. This concept could be extended to other model architectures by identifying the mathematical components that could be controlled in unsupervised sample selection \cite{Li2020}. 
 
 
+
 % -----------------------------------------------------
 % ------------------- data availability  ------------
 % -----------------------------------------------------
@@ -478,21 +500,31 @@ All the methodology and data that was used in the present work is available for 
 % ------------------- acknowledgements  ------------
 % -----------------------------------------------------
 
-\begin{acknowledgement}
+\section{Acknowledgement}
 
 Valeria Fonseca Diaz is funded as aspirant to doctoral fellow of
 the Research Foundation-Flanders (FWO Brussels, Belgium).
 The authors thank Dr. Raffaele Vitale and professor Peter Goos (KU Leuven, Belgium) for their suggestions on the conducted analysis given their expertise in Chemometrics and Experimental Design. 
-\end{acknowledgement}
+
+
+\section{Conflict of interest}
+
+The authors declare that no conflict of interest whatsoever related to the current article exists.
 
 % -----------------------------------------------------
 % ------------------- bibliography  ------------
 % -----------------------------------------------------
 
 
+%% If you have bibdatabase file and want bibtex to generate the
+%% bibitems, please use
+%%
 
+\bibliographystyle{elsarticle-num} 
 \bibliography{biblio}
 
 
 \end{document}
-
+\endinput
+%%
+%% End of file `elsarticle-template-num.tex'.
