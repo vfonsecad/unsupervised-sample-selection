@@ -1,7 +1,7 @@
 # Unsupervised sample selection for multivariate calibration with PLS models
 This repository contains the implementation of different algorithms of unsupervised sample selection for multivariate calibration models in chemometrics. The methods that were reported and tested were hierarchical clustering, duplex, kennard stone, puchwein and d-optimal design of experiments. Other methods are available also in the current repository.
 
-The use of d-optimal designs is fetched from R with the AlgDesign package. This package needs to be installed manually to use the current d-optimal implementation. 
+The use of d-optimal designs is fetched from R with the [AlgDesign package](https://cran.r-project.org/web/packages/AlgDesign/index.html). This package needs to be installed manually to use the current d-optimal implementation. 
 
 
 |    Package  |   Version  | Priority   |  Depends |  
