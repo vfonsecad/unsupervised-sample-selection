@@ -16,3 +16,12 @@ A protocol for unsupervised sample selection and evaluation can be found in the 
 
 For reproducibility of the original publication, please use the environment.yml file. 
 
+Original publication: Valeria Fonseca Diaz, Bart De Ketelaere, Ben Aernouts, Wouter Saeys,
+Cost-efficient unsupervised sample selection for multivariate calibration,
+Chemometrics and Intelligent Laboratory Systems,
+Volume 215,
+2021,
+104352,
+ISSN 0169-7439
+https://doi.org/10.1016/j.chemolab.2021.104352
+
